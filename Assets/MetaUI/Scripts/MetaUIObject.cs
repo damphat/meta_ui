@@ -1,8 +1,12 @@
+#region
+
 using System;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 using Object = UnityEngine.Object;
+
+#endregion
 
 namespace com.damphat.MetaUI
 {
@@ -34,10 +38,7 @@ namespace com.damphat.MetaUI
         public WrapGameObject Get(string name)
         {
             var go = _gameObject.transform.Find(name)?.gameObject;
-            if (go == null)
-            {
-                throw new UnityException($"WrapGameObject.Get('{name}') => NOT FOUND");
-            }
+            if (go == null) throw new UnityException($"WrapGameObject.Get('{name}') => NOT FOUND");
 
             return new WrapGameObject(go);
         }

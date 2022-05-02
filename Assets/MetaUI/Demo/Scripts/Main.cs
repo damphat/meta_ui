@@ -14,29 +14,29 @@ public class Main : MonoBehaviour
     private void Start()
     {
         var cv = UI.Canvas();
-        
+
         var login = cv.Get("signInPanel").Show(() => current == null);
 
         login.Get("google").Click(() => current = "damphat@gmail.com");
-        
+
         login.Get("email").Changed(value => email = value);
-        
+
         login.Get("password").Changed(value => password = value);
-        
+
         login.Get("signIn")
             .Click(() => current = email)
             .Disable(() => string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password));
 
         var game = cv.Get("game").Show(() => current != null);
-        
+
         game.Get("current").Text(() => current);
-        
+
         game.Get("signOut")
             .Text(() => $"Sign Out {current}")
             .Click(() => current = null);
 
         var show = true;
-        
+
         var leftPanel = cv.Get("leftPanel");
 
         leftPanel.Get("toggle")
@@ -55,8 +55,7 @@ public class Main : MonoBehaviour
 
         var rightPanel = cv.Get("rightPanel");
         var value = "init";
-        rightPanel.Get("input1").Value(() => value).Changed((v) => value = v);
-        rightPanel.Get("input2").Value(() => value).Changed((v) => value = v);
-
+        rightPanel.Get("input1").Value(() => value).Changed(v => value = v);
+        rightPanel.Get("input2").Value(() => value).Changed(v => value = v);
     }
 }
