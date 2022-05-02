@@ -13,6 +13,7 @@ namespace com.damphat.MetaUI
     public class WrapGameObject
     {
         private readonly GameObject _gameObject;
+        public GameObject gameObject => _gameObject;
 
         public WrapGameObject(GameObject go)
         {
@@ -127,6 +128,15 @@ namespace com.damphat.MetaUI
             updater.Set("Value", () => input.text = provider());
             return this;
         }
+
+        public WrapGameObject Update(string name, Action action)
+        {
+            var updater = _gameObject.GetComponent<MetaUIUpdater>() ?? _gameObject.AddComponent<MetaUIUpdater>();
+            var input = _gameObject.GetComponent<InputField>();
+            updater.Set(name, action);
+            return this;
+        }
+
 
         #endregion
     }
