@@ -3301,33 +3301,9 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1649930672}
     m_Modifications:
-    - target: {fileID: 4099313862190779454, guid: e339ab2cb3a672940912812c8458e1ad, type: 3}
-      propertyPath: m_Text
-      value: '1
-
-        2
-
-        3
-
-        4
-
-        5
-
-        6
-
-        7
-
-        8
-
-        9'
-      objectReference: {fileID: 0}
-    - target: {fileID: 4099313862190779454, guid: e339ab2cb3a672940912812c8458e1ad, type: 3}
-      propertyPath: m_FontData.m_BestFit
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 4099313862442367952, guid: e339ab2cb3a672940912812c8458e1ad, type: 3}
       propertyPath: m_Name
-      value: toast1
+      value: toast
       objectReference: {fileID: 0}
     - target: {fileID: 4099313862442367955, guid: e339ab2cb3a672940912812c8458e1ad, type: 3}
       propertyPath: m_Pivot.x

@@ -1,9 +1,12 @@
 #region
 
 using System;
+using System.Diagnostics;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
+using Debug = UnityEngine.Debug;
 using Object = UnityEngine.Object;
 
 #endregion
@@ -103,9 +106,89 @@ namespace com.damphat.MetaUI
             return this;
         }
 
+        [Obsolete("Used Clicked")]
         public WrapGameObject Click(UnityAction click)
         {
             _gameObject.GetComponent<Button>().onClick.AddListener(click);
+            return this;
+        }
+        public WrapGameObject Clicked(Action click)
+        {
+            _gameObject.GetComponent<Button>().onClick.AddListener(() =>
+            {
+                try
+                {
+                    click();
+                }
+                catch (Exception ex)
+                {
+                    UI.Toast(ex.Message);
+                    Debug.LogError(ex);
+                }
+            });
+            return this;
+        }
+
+        public WrapGameObject Clicked<R>(Func<R> click)
+        {
+            _gameObject.GetComponent<Button>().onClick.AddListener(() =>
+            {
+                try
+                {
+                    var r = click();
+                    UI.Toast(r);
+                }
+                catch (Exception ex)
+                {
+                    UI.Toast(ex.Message);
+                    Debug.LogError(ex);
+                }
+            });
+            return this;
+        }
+
+        public WrapGameObject Clicked(Func<Task> click)
+        {
+            _gameObject.GetComponent<Button>().onClick.AddListener(async () =>
+            {
+                try
+                {
+                    Enable(false);
+                    await click();
+                }
+                catch (Exception ex)
+                {
+                    UI.Toast(ex.Message);
+                    Debug.LogError(ex);
+                }
+                finally
+                {
+                    Enable(true);
+                }
+            });
+            return this;
+        }
+
+        public WrapGameObject Clicked<R>(Func<Task<R>> click)
+        {
+            _gameObject.GetComponent<Button>().onClick.AddListener(async () =>
+            {
+                try
+                {
+                    Enable(false);
+                    var r = await click();
+                    UI.Toast(r);
+                }
+                catch (Exception ex)
+                {
+                    UI.Toast(ex.Message);
+                    Debug.LogError(ex);
+                }
+                finally
+                {
+                    Enable(true);
+                }
+            });
             return this;
         }
 

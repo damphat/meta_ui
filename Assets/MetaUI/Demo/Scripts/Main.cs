@@ -1,5 +1,7 @@
 #region
 
+using System;
+using System.Threading.Tasks;
 using com.damphat.MetaUI;
 using UnityEngine;
 
@@ -17,14 +19,14 @@ public class Main : MonoBehaviour
 
         var login = cv.Get("signInPanel").Show(() => current == null);
 
-        login.Get("google").Click(() => current = "damphat@gmail.com");
+        login.Get("google").Clicked(() => current = "damphat@gmail.com");
 
         login.Get("email").Changed(value => email = value);
 
         login.Get("password").Changed(value => password = value);
 
         login.Get("signIn")
-            .Click(() => current = email)
+            .Clicked(() => current = email)
             .Disable(() => string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password));
 
         var game = cv.Get("game").Show(() => current != null);
@@ -33,7 +35,7 @@ public class Main : MonoBehaviour
 
         game.Get("signOut")
             .Text(() => $"Sign Out {current}")
-            .Click(() => current = null);
+            .Clicked(() => current = null);
 
         var show = true;
 
@@ -41,25 +43,59 @@ public class Main : MonoBehaviour
 
         leftPanel.Get("toggle")
             .Text(() => show ? "<<" : ">>")
-            .Click(() => show = !show);
+            .Clicked(() =>
+            {
+                show = !show;
+            });
 
         var commands = leftPanel.Get("commands").Show(() => show);
 
         commands.Add()
             .Text("www.damphat.com")
-            .Click(() => Application.OpenURL("www.damphat.com"));
+            .Clicked(() => Application.OpenURL("www.damphat.com"));
 
         commands.Add()
             .Text("Toast(Hello, 1)")
-            .Click(() => UI.Toast("Hello everybody! this is a long long long message 1111111111111 22222222222222 33333333333 4444444", 10));
+            .Clicked(() => UI.Toast("Hello everybody! this is a long long long message 1111111111111 22222222222222 33333333333 4444444", 10));
 
         commands.Add()
             .Text("Toast({first: Phat, last: Dam })")
-            .Click(() => UI.Toast("{\n  first: Phat,\n  last: Dam\n}", 10));
+            .Clicked(() => UI.Toast("{\n  first: Phat,\n  last: Dam\n}", 10));
 
         commands.Add()
             .Text("Exit")
-            .Click(Application.Quit);
+            .Clicked(Application.Quit);
+
+        commands.Add()
+            .Text("() => true")
+            .Clicked(() => true);
+
+        commands.Add()
+            .Text("() => throw new Exception(an error)")
+            .Clicked(() => throw new Exception("an error"));
+
+        commands.Add()
+            .Text("() => delay(3000)")
+            .Clicked(async () =>
+            {
+                await Task.Delay(3000);
+            });
+
+        commands.Add()
+            .Text("() => delay(3000) then return true")
+            .Clicked(async () =>
+            {
+                await Task.Delay(3000);
+                return true;
+            });
+
+        commands.Add()
+            .Text("() => delay(3000) then throw")
+            .Clicked(async () =>
+            {
+                await Task.Delay(3000);
+                throw new Exception("an error");
+            });
 
         var rightPanel = cv.Get("rightPanel");
         var value = "init";
