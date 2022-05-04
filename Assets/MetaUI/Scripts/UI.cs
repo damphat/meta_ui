@@ -41,13 +41,20 @@ namespace com.damphat.MetaUI
             }
         }
 
-        public static void Toast(string message, float seconds = 3)
+        public static string ToDebugString(object msg)
+        {
+            if (msg == null) return "null";
+            if (msg is bool b) return b? "true": "false";
+            return msg.ToString();
+        }
+
+        public static void Toast(object message, float seconds = 3)
         {
             ToastInit();
 
             var item = Object.Instantiate(_toastItem, _toastList.transform);
             item.SetActive(true);
-            item.GetComponentInChildren<Text>().text = message;
+            item.GetComponentInChildren<Text>().text = ToDebugString(message);
             Object.Destroy(item, seconds);
         }
     }
