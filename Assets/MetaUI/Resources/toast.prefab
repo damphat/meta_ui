@@ -79,7 +79,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "Vietnam:\n    Ho chi minh city\n    hanoi\n    hue"
+  m_Text: toast message
 --- !u!114 &1848230929
 MonoBehaviour:
   m_ObjectHideFlags: 0
