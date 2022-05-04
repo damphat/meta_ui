@@ -1,7 +1,10 @@
 #region
 
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Object = UnityEngine.Object;
 
 #endregion
 
@@ -14,6 +17,34 @@ namespace com.damphat.MetaUI
             var go = name == null ? Object.FindObjectOfType<Canvas>().gameObject : GameObject.Find(name);
 
             return new WrapGameObject(go);
+        }
+
+        public static WrapGameObject Get(string name)
+        {            
+            return new WrapGameObject(GameObject.Find(name)); 
+        }
+
+
+        public static WrapGameObject Get(GameObject from, string name = null)
+        {
+            if (name == null)
+            {
+                return new WrapGameObject(from);
+            }
+            else {
+                return new WrapGameObject(from.transform.Find(name).gameObject);
+            }            
+        }
+
+        public static WrapGameObject Get(Component from, string name = null)
+        {
+            if (name == null)
+            {
+                return new WrapGameObject(from.gameObject);
+            }
+            else {
+                return new WrapGameObject(from.transform.Find(name).gameObject);
+            }            
         }
 
         private static GameObject _toastList;
@@ -41,21 +72,49 @@ namespace com.damphat.MetaUI
             }
         }
 
+        public static Dictionary<Type, Func<object, string>> Debug = new Dictionary<Type, Func<object, string>>
+        {
+            {typeof(bool), b => (bool)b ? "true" : "false"},
+        };
         public static string ToDebugString(object msg)
         {
             if (msg == null) return "null";
-            if (msg is bool b) return b? "true": "false";
+            if(Debug.ContainsKey(msg.GetType()))
+            {
+                return Debug[msg.GetType()](msg);
+            }
             return msg.ToString();
         }
 
-        public static void Toast(object message, float seconds = 3)
+        private static readonly Color ColorInfo = new Color(1,1,0,0.2f);
+        private static readonly Color ColorResult = new Color(0.5f, 1, 0.5f, 0.2f);
+        private static readonly Color ColorError = new Color(1, 0.5f, 0.5f, 0.2f);
+
+
+        public static void ToastInternal(object message, float seconds, Color color)
         {
             ToastInit();
 
             var item = Object.Instantiate(_toastItem, _toastList.transform);
             item.SetActive(true);
             item.GetComponentInChildren<Text>().text = ToDebugString(message);
+            item.GetComponentInChildren<Image>().color = color;
             Object.Destroy(item, seconds);
+        }
+
+        public static void Toast(object message, float seconds = 3)
+        {
+            ToastInternal(message, seconds, ColorInfo);
+        }
+
+        public static void ToastResult(object message, float seconds = 3)
+        {
+            ToastInternal(message, seconds, ColorResult);
+        }
+
+        public static void ToastError(object message, float seconds = 3)
+        {
+            ToastInternal(message, seconds, ColorError);
         }
     }
 }
