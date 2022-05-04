@@ -42,25 +42,25 @@ A tiny library for binding GameObjects with variables.
 - [x] Query
 - [ ] Instanciate
 - [x] `UI.Toast(msg, seconds)`, clickthrough, customizable
+
   - [ ] Info, Warning, Error
-- [ ] Click
-  - [ ] Click(Action)
-  - [ ] Click(Func<Task>)
-  - [ ] Click(Func<R>)
-  - [ ] Click(Func<Task<R>>)
-  - [ ] Disable the button while performing
-  - [ ] Toast Error if an Exception occurs or the Task failes
-  - [ ] Toast the result in case the input is Func<R> or Func<Task<R>>
+
+- [x] Click
+
+  - [x] Click(Action | Func<Task> | Func<R> | Func<Task<R>>)
+  - [x] Disable the button while performing
+  - [x] Toast the result and error
+
 - [x] Binding (active, enable, value, changed)
 
   - [x] Text, Button, Input
   - [ ] Checkbox, Slider
   - [ ] TMP
-  - [ ] Custom
 
 - [ ] layout
 - [ ] Custom Widgets
 
+  - [ ] network image
   - [ ] messagebox, modal
   - [ ] menu
   - [ ] navigator, push, pop, replace, state-management

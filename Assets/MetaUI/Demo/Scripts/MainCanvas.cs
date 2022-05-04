@@ -7,15 +7,15 @@ using UnityEngine;
 
 #endregion
 
-public class Main : MonoBehaviour
+public class MainCanvas : MonoBehaviour
 {
-    private string current;
-    private string email;
-    private string password;
-
     private void Start()
     {
-        var cv = UI.Canvas();
+        string current = null;
+        string email = null;
+        string password = null;
+
+        var cv = UI.Get(this);
 
         var login = cv.Get("signInPanel").Show(() => current == null);
 
@@ -55,12 +55,12 @@ public class Main : MonoBehaviour
             .Clicked(() => Application.OpenURL("www.damphat.com"));
 
         commands.Add()
-            .Text("Toast(Hello, 1)")
-            .Clicked(() => UI.Toast("Hello everybody! this is a long long long message 1111111111111 22222222222222 33333333333 4444444", 10));
+            .Text("Toast a long message")
+            .Clicked(() => UI.Toast("Hello everybody! this is a long long long long long long long long long message", 5));
 
         commands.Add()
-            .Text("Toast({first: Phat, last: Dam })")
-            .Clicked(() => UI.Toast("{\n  first: Phat,\n  last: Dam\n}", 10));
+            .Text("Toast a multi-line message")
+            .Clicked(() => UI.Toast("{\n  first: Phat,\n  last: Dam\n}", 5));
 
         commands.Add()
             .Text("Exit")
