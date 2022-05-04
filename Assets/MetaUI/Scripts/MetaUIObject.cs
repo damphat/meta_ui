@@ -122,7 +122,7 @@ namespace com.damphat.MetaUI
                 }
                 catch (Exception ex)
                 {
-                    UI.Toast(ex.Message);
+                    UI.ToastError(ex.Message);
                     Debug.LogError(ex);
                 }
             });
@@ -136,11 +136,11 @@ namespace com.damphat.MetaUI
                 try
                 {
                     var r = click();
-                    UI.Toast(r);
+                    UI.ToastResult(r);
                 }
                 catch (Exception ex)
                 {
-                    UI.Toast(ex.Message);
+                    UI.ToastError(ex.Message);
                     Debug.LogError(ex);
                 }
             });
@@ -158,7 +158,7 @@ namespace com.damphat.MetaUI
                 }
                 catch (Exception ex)
                 {
-                    UI.Toast(ex.Message);
+                    UI.ToastError(ex.Message);
                     Debug.LogError(ex);
                 }
                 finally
@@ -177,11 +177,11 @@ namespace com.damphat.MetaUI
                 {
                     Enable(false);
                     var r = await click();
-                    UI.Toast(r);
+                    UI.ToastResult(r);
                 }
                 catch (Exception ex)
                 {
-                    UI.Toast(ex.Message);
+                    UI.ToastError(ex.Message);
                     Debug.LogError(ex);
                 }
                 finally
