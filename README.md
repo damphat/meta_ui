@@ -30,10 +30,27 @@ A tiny library for binding GameObjects with variables.
         .Show(() => currentUser != null)
 ```
 
+```cs
+  // toast a message at bottom of screen for 3 seconds
+
+  UI.Toast("Hello !", 3)
+
+```
+
 ## TODO
 
 - [x] Query
 - [ ] Instanciate
+- [x] `UI.Toast(msg, seconds)`, clickthrough, customizable
+  - [ ] Info, Warning, Error
+- [ ] Click
+  - [ ] Click(Action)
+  - [ ] Click(Func<Task>)
+  - [ ] Click(Func<R>)
+  - [ ] Click(Func<Task<R>>)
+  - [ ] Disable the button while performing
+  - [ ] Toast Error if an Exception occurs or the Task failes
+  - [ ] Toast the result in case the input is Func<R> or Func<Task<R>>
 - [x] Binding (active, enable, value, changed)
 
   - [x] Text, Button, Input
@@ -44,7 +61,6 @@ A tiny library for binding GameObjects with variables.
 - [ ] layout
 - [ ] Custom Widgets
 
-  - [ ] toast, clickthrough
   - [ ] messagebox, modal
   - [ ] menu
   - [ ] navigator, push, pop, replace, state-management

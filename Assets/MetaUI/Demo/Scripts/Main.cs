@@ -50,6 +50,14 @@ public class Main : MonoBehaviour
             .Click(() => Application.OpenURL("www.damphat.com"));
 
         commands.Add()
+            .Text("Toast(Hello, 1)")
+            .Click(() => UI.Toast("Hello everybody! this is a long long long message 1111111111111 22222222222222 33333333333 4444444", 10));
+
+        commands.Add()
+            .Text("Toast({first: Phat, last: Dam })")
+            .Click(() => UI.Toast("{\n  first: Phat,\n  last: Dam\n}", 10));
+
+        commands.Add()
             .Text("Exit")
             .Click(Application.Quit);
 

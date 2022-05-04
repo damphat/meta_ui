@@ -1,6 +1,7 @@
 #region
 
 using UnityEngine;
+using UnityEngine.UI;
 
 #endregion
 
@@ -13,6 +14,41 @@ namespace com.damphat.MetaUI
             var go = name == null ? Object.FindObjectOfType<Canvas>().gameObject : GameObject.Find(name);
 
             return new WrapGameObject(go);
+        }
+
+        private static GameObject _toastList;
+        private static GameObject _toastItem;
+
+        private static void ToastInit()
+        {
+
+            if (_toastList == null)
+            {
+                var canvas = UI.Canvas().gameObject;
+                _toastList = canvas.transform.Find("toast")?.gameObject;
+            }
+
+            if (_toastList == null)
+            {
+                var canvas = UI.Canvas().gameObject;
+
+                _toastList = Object.Instantiate(Resources.Load<GameObject>("toast"), canvas.transform);
+            }
+
+            if (_toastItem == null)
+            {
+                _toastItem = _toastList.transform.Find("Item").gameObject;
+            }
+        }
+
+        public static void Toast(string message, float seconds = 3)
+        {
+            ToastInit();
+
+            var item = Object.Instantiate(_toastItem, _toastList.transform);
+            item.SetActive(true);
+            item.GetComponentInChildren<Text>().text = message;
+            Object.Destroy(item, seconds);
         }
     }
 }
