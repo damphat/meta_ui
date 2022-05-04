@@ -40,14 +40,13 @@ A tiny library for binding GameObjects with variables.
 ## TODO
 
 - [x] Query
-- [ ] Instanciate
 - [x] `UI.Toast(msg, seconds)`, clickthrough, customizable
 
-  - [ ] Info, Warning, Error
+  - [x] ToastError, ToastResult
 
 - [x] Click
 
-  - [x] Click(Action | Func<Task> | Func<R> | Func<Task<R>>)
+  - [x] Click(`Action` | `Func<Task>` | `Func<R>` | `Func<Task<R>>`)
   - [x] Disable the button while performing
   - [x] Toast the result and error
 
@@ -57,13 +56,13 @@ A tiny library for binding GameObjects with variables.
   - [ ] Checkbox, Slider
   - [ ] TMP
 
-- [ ] layout
 - [ ] Custom Widgets
 
   - [ ] network image
   - [ ] messagebox, modal
   - [ ] menu
   - [ ] navigator, push, pop, replace, state-management
-  - [ ] list<string>
 
 - [ ] useEffect
+
+- [ ] JSON tree
