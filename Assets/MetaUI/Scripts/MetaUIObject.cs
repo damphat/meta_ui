@@ -1,12 +1,10 @@
 #region
 
 using System;
-using System.Diagnostics;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
-using Debug = UnityEngine.Debug;
 using Object = UnityEngine.Object;
 
 #endregion
@@ -15,12 +13,11 @@ namespace com.damphat.MetaUI
 {
     public class WrapGameObject
     {
-        private readonly GameObject _gameObject;
-        public GameObject gameObject => _gameObject;
+        public GameObject gameObject { get; }
 
         public WrapGameObject(GameObject go)
         {
-            _gameObject = go;
+            gameObject = go;
         }
 
 
@@ -28,8 +25,8 @@ namespace com.damphat.MetaUI
 
         public WrapGameObject Add(string name = null)
         {
-            var item = _gameObject.transform.Find("Item").gameObject;
-            var go = Object.Instantiate(item, _gameObject.transform);
+            var item = gameObject.transform.Find("Item").gameObject;
+            var go = Object.Instantiate(item, gameObject.transform);
             go.SetActive(true);
             if (name != null) go.name = name;
             return new WrapGameObject(go);
@@ -41,7 +38,7 @@ namespace com.damphat.MetaUI
 
         public WrapGameObject Get(string name)
         {
-            var go = _gameObject.transform.Find(name)?.gameObject;
+            var go = gameObject.transform.Find(name)?.gameObject;
             if (go == null) throw new UnityException($"WrapGameObject.Get('{name}') => NOT FOUND");
 
             return new WrapGameObject(go);
@@ -53,28 +50,28 @@ namespace com.damphat.MetaUI
 
         public WrapGameObject Show(bool value)
         {
-            _gameObject.SetActive(value);
+            gameObject.SetActive(value);
             return this;
         }
 
         public WrapGameObject Show(Func<bool> provider)
         {
-            MetaUIManager.Instance.Show(_gameObject, provider);
+            MetaUIManager.Instance.Show(gameObject, provider);
             return this;
         }
 
         public WrapGameObject Enable(bool value)
         {
             // TODO should cached this value?
-            var selectable = _gameObject.GetComponent<Selectable>();
+            var selectable = gameObject.GetComponent<Selectable>();
             selectable.interactable = value;
             return this;
         }
 
         public WrapGameObject Enable(Func<bool> provider)
         {
-            var updater = _gameObject.GetComponent<MetaUIUpdater>() ?? _gameObject.AddComponent<MetaUIUpdater>();
-            var selectable = _gameObject.GetComponent<Selectable>();
+            var updater = gameObject.GetComponent<MetaUIUpdater>() ?? gameObject.AddComponent<MetaUIUpdater>();
+            var selectable = gameObject.GetComponent<Selectable>();
             updater.Set("enable", () => { selectable.interactable = provider(); });
             return this;
         }
@@ -86,22 +83,22 @@ namespace com.damphat.MetaUI
 
         public WrapGameObject Disable(Func<bool> provider)
         {
-            var updater = _gameObject.GetComponent<MetaUIUpdater>() ?? _gameObject.AddComponent<MetaUIUpdater>();
-            var selectable = _gameObject.GetComponent<Selectable>();
+            var updater = gameObject.GetComponent<MetaUIUpdater>() ?? gameObject.AddComponent<MetaUIUpdater>();
+            var selectable = gameObject.GetComponent<Selectable>();
             updater.Set("enable", () => { selectable.interactable = !provider(); });
             return this;
         }
 
         public WrapGameObject Text(string text)
         {
-            _gameObject.GetComponentInChildren<Text>().text = text;
+            gameObject.GetComponentInChildren<Text>().text = text;
             return this;
         }
 
         public WrapGameObject Text(Func<string> provider)
         {
-            var updater = _gameObject.GetComponent<MetaUIUpdater>() ?? _gameObject.AddComponent<MetaUIUpdater>();
-            var text = _gameObject.GetComponentInChildren<Text>();
+            var updater = gameObject.GetComponent<MetaUIUpdater>() ?? gameObject.AddComponent<MetaUIUpdater>();
+            var text = gameObject.GetComponentInChildren<Text>();
             updater.Set("text", () => { text.text = provider(); });
             return this;
         }
@@ -109,12 +106,13 @@ namespace com.damphat.MetaUI
         [Obsolete("Used Clicked")]
         public WrapGameObject Click(UnityAction click)
         {
-            _gameObject.GetComponent<Button>().onClick.AddListener(click);
+            gameObject.GetComponent<Button>().onClick.AddListener(click);
             return this;
         }
+
         public WrapGameObject Clicked(Action click)
         {
-            _gameObject.GetComponent<Button>().onClick.AddListener(() =>
+            gameObject.GetComponent<Button>().onClick.AddListener(() =>
             {
                 try
                 {
@@ -131,7 +129,7 @@ namespace com.damphat.MetaUI
 
         public WrapGameObject Clicked<R>(Func<R> click)
         {
-            _gameObject.GetComponent<Button>().onClick.AddListener(() =>
+            gameObject.GetComponent<Button>().onClick.AddListener(() =>
             {
                 try
                 {
@@ -149,7 +147,7 @@ namespace com.damphat.MetaUI
 
         public WrapGameObject Clicked(Func<Task> click)
         {
-            _gameObject.GetComponent<Button>().onClick.AddListener(async () =>
+            gameObject.GetComponent<Button>().onClick.AddListener(async () =>
             {
                 try
                 {
@@ -171,7 +169,7 @@ namespace com.damphat.MetaUI
 
         public WrapGameObject Clicked<R>(Func<Task<R>> click)
         {
-            _gameObject.GetComponent<Button>().onClick.AddListener(async () =>
+            gameObject.GetComponent<Button>().onClick.AddListener(async () =>
             {
                 try
                 {
@@ -194,32 +192,31 @@ namespace com.damphat.MetaUI
 
         public WrapGameObject Changed(UnityAction<string> changed)
         {
-            _gameObject.GetComponent<InputField>().onValueChanged.AddListener(changed);
+            gameObject.GetComponent<InputField>().onValueChanged.AddListener(changed);
             return this;
         }
 
         public WrapGameObject Value(string value)
         {
-            _gameObject.GetComponent<InputField>().text = value;
+            gameObject.GetComponent<InputField>().text = value;
             return this;
         }
 
         public WrapGameObject Value(Func<string> provider)
         {
-            var updater = _gameObject.GetComponent<MetaUIUpdater>() ?? _gameObject.AddComponent<MetaUIUpdater>();
-            var input = _gameObject.GetComponent<InputField>();
+            var updater = gameObject.GetComponent<MetaUIUpdater>() ?? gameObject.AddComponent<MetaUIUpdater>();
+            var input = gameObject.GetComponent<InputField>();
             updater.Set("Value", () => input.text = provider());
             return this;
         }
 
         public WrapGameObject Update(string name, Action action)
         {
-            var updater = _gameObject.GetComponent<MetaUIUpdater>() ?? _gameObject.AddComponent<MetaUIUpdater>();
-            var input = _gameObject.GetComponent<InputField>();
+            var updater = gameObject.GetComponent<MetaUIUpdater>() ?? gameObject.AddComponent<MetaUIUpdater>();
+            var input = gameObject.GetComponent<InputField>();
             updater.Set(name, action);
             return this;
         }
-
 
         #endregion
     }
