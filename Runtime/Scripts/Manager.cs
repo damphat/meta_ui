@@ -12,9 +12,9 @@ namespace MetaUI
     internal class Manager : MonoBehaviour
     {
         private static Manager _instance;
+        private readonly Dictionary<GameObject, Func<bool>> _showDict = new Dictionary<GameObject, Func<bool>>();
 
         private readonly HashSet<GameObject> _showDictMarked = new HashSet<GameObject>();
-        private readonly Dictionary<GameObject, Func<bool>> _showDict = new Dictionary<GameObject, Func<bool>>();
 
         public static Manager Instance
         {
@@ -36,18 +36,6 @@ namespace MetaUI
             _instance = this;
         }
 
-        public void Show(GameObject go, Func<bool> provider)
-        {
-            if (provider != null)
-            {
-                _showDict[go] = provider;
-            }
-            else
-            {
-                _showDict.Remove(go);
-            }
-        }
-
         private void Update()
         {
             foreach (var show in _showDict)
@@ -65,6 +53,18 @@ namespace MetaUI
             foreach (var o in _showDictMarked)
             {
                 _showDict.Remove(o);
+            }
+        }
+
+        public void Show(GameObject go, Func<bool> provider)
+        {
+            if (provider != null)
+            {
+                _showDict[go] = provider;
+            }
+            else
+            {
+                _showDict.Remove(go);
             }
         }
     }
