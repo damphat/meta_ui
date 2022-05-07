@@ -13,15 +13,15 @@ namespace MetaUI
     // TODO: Wrap multiple gameObject
     public partial class WrapGameObject
     {
-        public GameObject gameObject { get; }
-
-
-        public string Path => Utils.GetPath(gameObject.transform);
-
         public WrapGameObject(GameObject go)
         {
             gameObject = go;
         }
+
+        public GameObject gameObject { get; }
+
+
+        public string Path => Utils.GetPath(gameObject.transform);
 
         public WrapGameObject Add(string template = null, string name = null)
         {

@@ -9,12 +9,6 @@ namespace MetaUI.Editor
 {
     public class MetaUIWindow : EditorWindow
     {
-        [MenuItem("Window/Meta UI")]
-        public static void ShowWindow()
-        {
-            GetWindow(typeof(MetaUIWindow));
-        }
-
         public void OnGUI()
         {
             if (GUILayout.Button("Say Hello"))
@@ -35,6 +29,12 @@ namespace MetaUI.Editor
                 EditorGUILayout.LabelField("Label 2");
             }
             EditorGUILayout.EndHorizontal();
+        }
+
+        [MenuItem("Window/Meta UI")]
+        public static void ShowWindow()
+        {
+            GetWindow(typeof(MetaUIWindow));
         }
     }
 }

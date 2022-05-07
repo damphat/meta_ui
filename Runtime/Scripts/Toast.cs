@@ -26,6 +26,11 @@ namespace MetaUI
         private static GameObject _toastList;
         private static GameObject _toastItem;
 
+        public static Dictionary<Type, Func<object, string>> Formatter => new Dictionary<Type, Func<object, string>>
+        {
+            {typeof(bool), b => (bool) b ? "true" : "false"}
+        };
+
         private static void ToastInit()
         {
             if (_toastCanvas != null)
@@ -46,11 +51,6 @@ namespace MetaUI
             _toastList = _toastCanvas.transform.Find("toast").gameObject;
             _toastItem = _toastList.transform.Find("Item").gameObject;
         }
-
-        public static Dictionary<Type, Func<object, string>> Formatter => new Dictionary<Type, Func<object, string>>
-        {
-            {typeof(bool), b => (bool) b ? "true" : "false"}
-        };
 
         public static string Format(object msg)
         {
