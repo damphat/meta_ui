@@ -44,14 +44,19 @@ public class Counter : MonoBehaviour
   - [x] deep seach: Get("/Canvas/\*\*/button")
   - [x] type search: Get("\*\*/.button")
   - [x] index: Get("user/0")
+  - [ ] return a IBinder?
 
-- [x] `UI.Toast(msg, seconds)`,
+- [x] `Toast(msg, seconds)`,
 
   - [x] this.Toast(message)
   - [x] this.ToastError(msg)
   - [x] this.ToastResult(msg)
   - [x] can click through
   - [x] use separated Canvas
+  - [ ] singleton
+  - [ ] limit height
+  - [ ] animation slide up
+  - [ ] save preference
 
 - [x] Click
 

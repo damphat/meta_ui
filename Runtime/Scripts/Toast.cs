@@ -11,9 +11,9 @@ using Object = UnityEngine.Object;
 namespace MetaUI
 {
     // TODO: singleton
-    // TODO: scene that has more than 1 canvas
+    // TODO: limit height
+    // TODO: animate slide up
     // TODO: save preference
-    // TODO: use a separated Canvas?
     public static class Toast
     {
         public static float ConfigSeconds = 3;
