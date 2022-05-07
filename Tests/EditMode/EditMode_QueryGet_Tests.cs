@@ -1,8 +1,12 @@
+#region using
+
+using System.Linq;
 using MetaUI;
 using NUnit.Framework;
-using System.Linq;
 using UnityEditor.SceneManagement;
 using UnityEngine;
+
+#endregion
 
 public class EditMode_QueryGet_Tests
 {
@@ -13,7 +17,9 @@ public class EditMode_QueryGet_Tests
     }
 
     [TearDown]
-    public void TearDown() { }
+    public void TearDown()
+    {
+    }
 
     [Test]
     public void GetRootTransforms()
@@ -80,7 +86,6 @@ public class EditMode_QueryGet_Tests
     [Test]
     public void Get_GetChild()
     {
-        
         Assert.AreEqual("vietnam", GameObject.Find("vietnam").name);
         Assert.AreEqual("vietnam", GameObject.Find("/vietnam").name);
 

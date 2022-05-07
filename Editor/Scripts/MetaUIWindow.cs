@@ -1,4 +1,4 @@
-#region
+#region using
 
 using UnityEditor;
 using UnityEngine;
@@ -17,7 +17,10 @@ namespace MetaUI.Editor
 
         public void OnGUI()
         {
-            if (GUILayout.Button("Say Hello")) Toast.Info("Hello");
+            if (GUILayout.Button("Say Hello"))
+            {
+                Toast.Info("Hello");
+            }
 
             EditorGUILayout.BeginHorizontal();
             {

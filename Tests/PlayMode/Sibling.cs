@@ -1,5 +1,9 @@
+#region using
+
 using NUnit.Framework;
 using UnityEngine.SceneManagement;
+
+#endregion
 
 public class Sibling
 {
@@ -10,10 +14,9 @@ public class Sibling
 
         var objects = scene.GetRootGameObjects();
 
-        for (int i = 0; i < objects.Length; i++)
+        for (var i = 0; i < objects.Length; i++)
         {
             Assert.AreEqual(i, objects[i].transform.GetSiblingIndex());
         }
-
     }
 }

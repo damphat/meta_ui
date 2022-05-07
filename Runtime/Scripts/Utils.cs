@@ -1,4 +1,4 @@
-﻿#region
+﻿#region using
 
 using UnityEngine;
 
@@ -12,15 +12,15 @@ namespace MetaUI
         {
             var path = "";
             while (true)
+            {
                 if (transform == null)
                 {
                     return "/" + path;
                 }
-                else
-                {
-                    path = transform.name + "/" + path;
-                    transform = transform.parent;
-                }
+
+                path = transform.name + "/" + path;
+                transform = transform.parent;
+            }
         }
     }
 }

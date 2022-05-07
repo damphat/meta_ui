@@ -1,4 +1,4 @@
-﻿#region
+﻿#region using
 
 using System;
 using System.Collections.Generic;
@@ -28,10 +28,13 @@ namespace MetaUI
 
         private static void ToastInit()
         {
-            if (_toastCanvas != null) return;
+            if (_toastCanvas != null)
+            {
+                return;
+            }
 
             _toastCanvas = GameObject.Find("Toast Canvas");
-            
+
             if (_toastCanvas == null)
             {
                 _toastCanvas = Object.Instantiate(Resources.Load<GameObject>("Toast Canvas"));
@@ -39,7 +42,7 @@ namespace MetaUI
             }
 
             Object.DontDestroyOnLoad(_toastCanvas);
-            
+
             _toastList = _toastCanvas.transform.Find("toast").gameObject;
             _toastItem = _toastList.transform.Find("Item").gameObject;
         }
@@ -51,8 +54,16 @@ namespace MetaUI
 
         public static string Format(object msg)
         {
-            if (msg == null) return "null";
-            if (Formatter.ContainsKey(msg.GetType())) return Formatter[msg.GetType()](msg);
+            if (msg == null)
+            {
+                return "null";
+            }
+
+            if (Formatter.ContainsKey(msg.GetType()))
+            {
+                return Formatter[msg.GetType()](msg);
+            }
+
             return msg.ToString();
         }
 

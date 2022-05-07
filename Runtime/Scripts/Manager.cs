@@ -1,4 +1,4 @@
-﻿#region
+﻿#region using
 
 using System;
 using System.Collections.Generic;
@@ -39,20 +39,33 @@ namespace MetaUI
         public void Show(GameObject go, Func<bool> provider)
         {
             if (provider != null)
+            {
                 _showDict[go] = provider;
+            }
             else
+            {
                 _showDict.Remove(go);
+            }
         }
 
         private void Update()
         {
             foreach (var show in _showDict)
+            {
                 if (!show.Key)
+                {
                     _showDictMarked.Add(show.Key);
+                }
                 else
+                {
                     show.Key.SetActive(show.Value());
+                }
+            }
 
-            foreach (var o in _showDictMarked) _showDict.Remove(o);
+            foreach (var o in _showDictMarked)
+            {
+                _showDict.Remove(o);
+            }
         }
     }
 }

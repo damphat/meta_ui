@@ -1,4 +1,4 @@
-#region
+#region using
 
 using MetaUI;
 using UnityEngine;
@@ -18,7 +18,6 @@ public class Finder : MonoBehaviour
             }
             catch (MetaUIException e)
             {
-                
             }
         });
     }

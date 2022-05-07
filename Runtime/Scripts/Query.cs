@@ -1,4 +1,4 @@
-﻿#region
+﻿#region using
 
 using System;
 using System.Collections;
@@ -40,7 +40,6 @@ namespace MetaUI
                 {".input", DotInputField},
                 {".canvas", DotCanvas},
                 {".camera", DotCamera}
-
             };
 
 
@@ -53,13 +52,20 @@ namespace MetaUI
 
         public static List<object> Parse(string qs)
         {
-            if (qs == null) throw new ArgumentNullException(nameof(qs), "Query string is null");
+            if (qs == null)
+            {
+                throw new ArgumentNullException(nameof(qs), "Query string is null");
+            }
 
             var ret = new List<object>();
             var keys = qs.Split('/');
-            if (keys.Length >= 2 && keys[0] == "") keys[0] = null;
+            if (keys.Length >= 2 && keys[0] == "")
+            {
+                keys[0] = null;
+            }
 
             foreach (var key in keys)
+            {
                 if (string.IsNullOrEmpty(key))
                 {
                     ret.Add(key);
@@ -70,22 +76,31 @@ namespace MetaUI
                     if (c == '.')
                     {
                         if (MatchFunc.TryGetValue(key, out var func))
+                        {
                             ret.Add(func);
+                        }
                         else
+                        {
                             throw new MetaUIException($"Bad class '{key}' in the query string: '{qs}'");
+                        }
                     }
                     else if (c >= '0' && c <= '9')
                     {
                         if (int.TryParse(key, out var result))
+                        {
                             ret.Add(int.Parse(key));
+                        }
                         else
+                        {
                             throw new MetaUIException($"Bad number '{key}' in the query string: '{qs}'");
+                        }
                     }
                     else
                     {
                         ret.Add(key);
                     }
                 }
+            }
 
             return ret;
         }
@@ -95,7 +110,10 @@ namespace MetaUI
             var keys = Parse(path);
 
             if (keys.Count > 1 && keys[0] == null)
+            {
                 return Get(null, keys, 1, false);
+            }
+
             return Get(parent, keys, 0, false);
         }
 
@@ -105,13 +123,20 @@ namespace MetaUI
             {
                 var scene = SceneManager.GetActiveScene();
 
-                if (index >= scene.rootCount) return null;
+                if (index >= scene.rootCount)
+                {
+                    return null;
+                }
 
                 scene.GetRootGameObjects(RootObjects);
                 return RootObjects[index].transform;
             }
 
-            if (index >= parent.childCount) return null;
+            if (index >= parent.childCount)
+            {
+                return null;
+            }
+
             return parent.GetChild(index);
         }
 
@@ -128,7 +153,10 @@ namespace MetaUI
                 };
             }
 
-            if (index >= keys.Count) return parent;
+            if (index >= keys.Count)
+            {
+                return parent;
+            }
 
             var key = keys[index];
 
@@ -139,35 +167,54 @@ namespace MetaUI
                 if (child != null)
                 {
                     var ret = Get(child, keys, index + 1, false);
-                    if (ret != null) return ret;
+                    if (ret != null)
+                    {
+                        return ret;
+                    }
                 }
                 else
                 {
                     if (deep)
+                    {
                         foreach (Transform c in parent ? parent : GetRootTransforms())
                         {
                             var ret = Get(c, keys, index, true);
-                            if (ret != null) return ret;
+                            if (ret != null)
+                            {
+                                return ret;
+                            }
                         }
+                    }
                 }
             }
 
-            if ("**".Equals(key)) return Get(parent, keys, index + 1, true);
+            if ("**".Equals(key))
+            {
+                return Get(parent, keys, index + 1, true);
+            }
 
             foreach (Transform child in parent ? parent : GetRootTransforms())
+            {
                 if (Match(key, child))
                 {
                     var ret = Get(child, keys, index + 1, false);
-                    if (ret != null) return ret;
+                    if (ret != null)
+                    {
+                        return ret;
+                    }
                 }
                 else
                 {
                     if (deep)
                     {
                         var ret = Get(child, keys, index, true);
-                        if (ret != null) return ret;
+                        if (ret != null)
+                        {
+                            return ret;
+                        }
                     }
                 }
+            }
 
             return null;
         }

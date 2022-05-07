@@ -1,4 +1,4 @@
-#region
+#region using
 
 using UnityEngine;
 
@@ -28,6 +28,7 @@ namespace MetaUI
                 Toast.Info(msg, 10);
                 throw new MetaUIException(msg);
             }
+
             return new WrapGameObject(tr.gameObject);
         }
 

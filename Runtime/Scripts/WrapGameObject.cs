@@ -1,4 +1,4 @@
-#region
+#region using
 
 using System;
 using UnityEngine;
@@ -16,7 +16,7 @@ namespace MetaUI
         public GameObject gameObject { get; }
 
 
-        public string Path => Utils.GetPath(this.gameObject.transform);
+        public string Path => Utils.GetPath(gameObject.transform);
 
         public WrapGameObject(GameObject go)
         {
@@ -28,7 +28,11 @@ namespace MetaUI
             var item = gameObject.transform.Find(template ?? "Item").gameObject;
             var go = Object.Instantiate(item, gameObject.transform);
             go.SetActive(true);
-            if (name != null) go.name = name;
+            if (name != null)
+            {
+                go.name = name;
+            }
+
             return new WrapGameObject(go);
         }
 
@@ -115,9 +119,10 @@ namespace MetaUI
 
             return updater;
         }
+
         public WrapGameObject Value(Func<string> provider)
         {
-           var updater = GetUpdater();
+            var updater = GetUpdater();
 
             var input = gameObject.GetComponent<InputField>();
             updater.Set("Value", () => input.text = provider());

@@ -1,4 +1,4 @@
-﻿#region
+﻿#region using
 
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,7 +12,7 @@ namespace MetaUI
     internal class Updater : MonoBehaviour
     {
         private readonly Dictionary<string, UnityAction> _updateDictionary = new Dictionary<string, UnityAction>();
-        
+
 
         public void Set(string key, UnityAction action)
         {
@@ -21,7 +21,10 @@ namespace MetaUI
 
         private void Update()
         {
-            foreach (var action in _updateDictionary.Values) action?.Invoke();
+            foreach (var action in _updateDictionary.Values)
+            {
+                action?.Invoke();
+            }
         }
     }
 }
