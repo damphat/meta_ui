@@ -1,9 +1,0 @@
-{
-  "name": "com.damphat.meta_ui",
-  "version": "1.1.0",
-  "displayName": "Meta UI",
-  "description": "UI binding tools for Unity",
-  "author": "Phat <damphat@gmail.com>",
-  "unity": "2019.4",
-  "dependencies": {}
-}

@@ -2,47 +2,56 @@
 
 A tiny library for binding GameObjects with variables.
 
+**Counter example**
+
 ```cs
-    // Counter example
+using MetaUI;
 
-    var canvas = UI.Canvas(); // get Canvas from the current scene
-    var count = 0;
+public class Counter : MonoBehaviour
+{
+    private void Start()
+    {
+        var count = 0;
 
-    canvas.Get('myPanel/countButton')
-        .Text(() => count.ToString())
-        .Clicked( () => count++)
+        this.Get("**/count")
+            .Text(() => count.ToString());
+
+        this.Get("**/inc")
+            .Clicked(new Action(() => count++))
+    }
+}
+
 ```
+
+**Toast example**
 
 ```cs
     // Login example
-    var currentUser = (string)null;
-
-    canvas.Get('current')
-        .Text(() => currentUser)
-        .Show(() => currentUser != null)
-
-    canvas.Get('login')
-        .Clicked(() => currentUser = 'aaa@gmail.com')
-        .Show(() => currentUser == null)
-
-    canvas.Get('logout')
-        .Clicked(() => currentUser = null)
-        .Show(() => currentUser != null)
-```
-
-```cs
-  // toast a message at bottom of screen for 3 seconds
-
-  UI.Toast("Hello !", 3)
-
+    private void Start()
+    {
+        this.Get("**/button1").Clicked(() => this.Toast("message"));
+        this.Get("**/button2").Clicked(() => this.ToastError("Error message"));
+        this.Get("**/button3").Clicked(() => this.ToastSuccess("Success message"));
+    }
 ```
 
 ## TODO
 
 - [x] Query
-- [x] `UI.Toast(msg, seconds)`, clickthrough, customizable
 
-  - [x] ToastError, ToastResult
+  - [x] from current: Get("path/to")
+  - [x] from root: Get("/path/to")
+  - [x] deep seach: Get("/Canvas/\*\*/button")
+  - [x] type search: Get("\*\*/.button")
+  - [x] index: Get("user/0")
+
+- [x] `UI.Toast(msg, seconds)`,
+
+  - [x] this.Toast(message)
+  - [x] this.ToastError(msg)
+  - [x] this.ToastResult(msg)
+  - [x] can click through
+  - [x] use separated Canvas
 
 - [x] Click
 
@@ -52,6 +61,7 @@ A tiny library for binding GameObjects with variables.
 
 - [x] Binding (active, enable, value, changed)
 
+  - [ ] ICustomBinder
   - [x] Text, Button, Input
   - [ ] Checkbox, Slider
   - [ ] TMP
@@ -60,9 +70,7 @@ A tiny library for binding GameObjects with variables.
 
   - [ ] network image
   - [ ] messagebox, modal
-  - [ ] menu
-  - [ ] navigator, push, pop, replace, state-management
 
-- [ ] useEffect
-
-- [ ] JSON tree
+- [ ] JSON
+  - [ ] immutable JSON
+  - [ ] component to bind a JSON with a GameObject
