@@ -7,6 +7,7 @@ public class Binding : MonoBehaviour
     {
         var enable = true;
         var title = "initial title";
+        var icon = Sprite.Create(Texture2D.redTexture, Rect.MinMaxRect(0,0,1,1), Vector2.zero);
         var stringValue = "initial stringValue";
         var boolValue = false;
         var intValue = 5;
@@ -15,7 +16,7 @@ public class Binding : MonoBehaviour
         var dialog = this.Get("dialog");
         var cmds = this.Get("commands");
 
-        cmds.Add().Text("Text(value)").Clicked(() => dialog.EachChild(c => c.Text("title")));
+        cmds.Add().Text("Text(value)").Clicked(() => dialog.EachChild(c => c.Text(title)));
         cmds.Add().Text("Text(provider)").Clicked(() => dialog.EachChild(c => c.Text(() => title)));
 
         cmds.Add().Text("Value()").Clicked(() => dialog.EachChild(c => c.Value(stringValue)));
@@ -28,35 +29,40 @@ public class Binding : MonoBehaviour
 
         cmds.Add().Text("SetXXX(value)").Clicked(() => dialog.EachChild(c =>
         {
-            c.SetBool(boolValue);
-            c.SetInt(intValue);
-            c.SetFloat(floatValue);
-            c.SetString(stringValue);
+            c.Title.Set(title);
+            c.Background.Set(icon);
+            c.ValueBool.Set(boolValue);
+            c.ValueInt.Set(intValue);
+            c.ValueFloat.Set(floatValue);
+            c.ValueString.Set(stringValue);
         }));
 
         cmds.Add().Text("SetXXX(() => value)").Clicked(() => dialog.EachChild(c =>
         {
-            c.SetBool(() => boolValue);
-            c.SetInt(() => intValue);
-            c.SetFloat(() => floatValue);
-            c.SetString(() => stringValue);
+            c.Title.Set(() => title);
+            c.Background.Set(() => icon);
+            c.ValueBool.Set(() => boolValue);
+            c.ValueInt.Set(() => intValue);
+            c.ValueFloat.Set(() => floatValue);
+            c.ValueString.Set(() => stringValue);
         }));
         
         cmds.Add().Text("GetXXX()").Clicked(() => dialog.EachChild(c =>
         {
             c.gameObject.name = "";
-            c.gameObject.name += $"{c.GetBool()},";
-            c.gameObject.name += $"{c.GetInt()},";
-            c.gameObject.name += $"{c.GetFloat()},";
-            c.gameObject.name += $"{c.GetString()},";
+            c.gameObject.name += $"t:{c.Title.Get()},";
+            c.gameObject.name += $"b:{c.ValueBool.Get()},";
+            c.gameObject.name += $"i:{c.ValueInt.Get()},";
+            c.gameObject.name += $"f:{c.ValueFloat.Get()},";
+            c.gameObject.name += $"s:{c.ValueString.Get()},";
         }));
 
         cmds.Add().Text("GetXXX((value) => {})").Clicked(() => dialog.EachChild(c =>
         {
-            c.AddBoolListener(x => this.Toast($"Bool:{x}"));
-            c.AddIntListener(x => this.Toast($"Int:{x}"));
-            c.AddFloatListener(x => this.Toast($"Float:{x}"));
-            c.AddStringListener(x => this.Toast($"String:{x}"));
+            c.ValueBool.Get(x => this.Toast($"Bool:{x}"));
+            c.ValueInt.Get(x => this.Toast($"Int:{x}"));
+            c.ValueFloat.Get(x => this.Toast($"Float:{x}"));
+            c.ValueString.Get(x => this.Toast($"String:{x}"));
         }));
 
         cmds.Add().Text("inc").Clicked(() =>
@@ -67,6 +73,7 @@ public class Binding : MonoBehaviour
             floatValue = intValue / 10f;
             stringValue = $"string {intValue}";
             title = $"title {intValue}";
+            icon = Sprite.Create(boolValue ? Texture2D.redTexture: Texture2D.grayTexture, Rect.MinMaxRect(0, 0, 1, 1), Vector2.zero);
         });
 
         ;

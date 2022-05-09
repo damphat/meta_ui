@@ -53,23 +53,13 @@ namespace MetaUI
 
         public WrapGameObject Enable(bool value)
         {
-            // TODO should cached this value?
-            //var selectable = gameObject.GetComponent<Selectable>();
-            //selectable.interactable = value;
-            //return this;
-
-            this.SetInteractable(value);
+            this.Binder.Interactable.Set(value);
             return this;
         }
 
         public WrapGameObject Enable(Func<bool> provider)
         {
-            //var updater = GetUpdater();
-            //var selectable = gameObject.GetComponent<Selectable>();
-            //updater.Set("enable", () => { selectable.interactable = provider(); });
-            //return this;
-
-            this.SetInteractable(provider);
+            this.Binder.Interactable.Set(provider);
             return this;
         }
 
@@ -80,85 +70,40 @@ namespace MetaUI
 
         public WrapGameObject Disable(Func<bool> provider)
         {
-            //var updater = GetUpdater();
-
-            //var selectable = gameObject.GetComponent<Selectable>();
-            //updater.Set("enable", () => { selectable.interactable = !provider(); });
-            //return this;
-
-            this.SetInteractable(() => !provider());
+            this.Binder.Interactable.Set(() => !provider());
             return this;
         }
 
         public virtual WrapGameObject Text(string text)
         {
-            //gameObject.GetComponentInChildren<Text>().text = text;
-            //return this;
-            this.SetTitle(text);
+            this.Binder.Title.Set(text);
             return this;
         }
 
         public virtual WrapGameObject Text(Func<string> provider)
         {
-            //var updater = GetUpdater();
-
-            //var text = gameObject.GetComponentInChildren<Text>();
-            //updater.Set("text", () => { text.text = provider(); });
-            //return this;
-
-            this.SetTitle(provider);
+            this.Binder.Title.Set(provider);
             return this;
         }
 
 
         public virtual WrapGameObject Changed(UnityAction<string> changed)
         {
-            //gameObject.GetComponent<InputField>().onValueChanged.AddListener(changed);
-            //return this;
-
-            this.AddStringListener(changed);
+            Binder.ValueString.Get(changed);
             return this;
         }
 
         public virtual WrapGameObject Value(string value)
         {
-            //gameObject.GetComponent<InputField>().text = value;
-            //return this;
-
-            this.SetString(value);
+            Binder.ValueString.Set(value);
             return this;
         }
-
-        //private Updater GetUpdater()
-        //{
-        //    var updater = gameObject.GetComponent<Updater>();
-        //    if (updater is null)
-        //    {
-        //        updater = gameObject.AddComponent<Updater>();
-        //    }
-
-        //    return updater;
-        //}
 
         public WrapGameObject Value(Func<string> provider)
         {
-            //var updater = GetUpdater();
-
-            //var input = gameObject.GetComponent<InputField>();
-            //updater.Set("Value", () => input.text = provider());
-            //return this;
-
-            this.SetString(provider);
+            Binder.ValueString.Set(provider);
             return this;
         }
-
-        //public WrapGameObject Update(string name, UnityAction action)
-        //{
-        //    var updater = GetUpdater();
-
-        //    updater.Set(name, action);
-        //    return this;
-        //}
 
         #endregion
     }
