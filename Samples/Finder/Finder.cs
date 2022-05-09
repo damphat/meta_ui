@@ -16,7 +16,7 @@ public class Finder : MonoBehaviour
                 var go = this.Get(qs);
                 this.Toast(go.gameObject);
             }
-            catch (MetaUIException e)
+            catch (MetaUIException)
             {
             }
         });

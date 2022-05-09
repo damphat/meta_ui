@@ -13,6 +13,11 @@ namespace MetaUI
             return UI.From(behavior).Get(qs);
         }
 
+        public static WrapGameObject Get(this MonoBehaviour behavior)
+        {
+            return UI.From(behavior);
+        }
+
         public static void Toast(this MonoBehaviour behaviour, object msg, float? seconds = null)
         {
             MetaUI.Toast.Info(msg, seconds);

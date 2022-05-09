@@ -1,7 +1,13 @@
+using UnityEngine;
+
 namespace MetaUI
 {
     partial class WrapGameObject
     {
+        public WrapGameObject From(Component c)
+        {
+            return new WrapGameObject(c.gameObject);
+        }
         public WrapGameObject Get(string qs)
         {
             var go = Query.Get(gameObject.transform, qs);

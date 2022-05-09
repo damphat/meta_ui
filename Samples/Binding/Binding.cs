@@ -1,0 +1,74 @@
+using MetaUI;
+using UnityEngine;
+
+public class Binding : MonoBehaviour
+{
+    void Start()
+    {
+        var enable = true;
+        var title = "initial title";
+        var stringValue = "initial stringValue";
+        var boolValue = false;
+        var intValue = 5;
+        var floatValue = 0.5f;
+        
+        var dialog = this.Get("dialog");
+        var cmds = this.Get("commands");
+
+        cmds.Add().Text("Text(value)").Clicked(() => dialog.EachChild(c => c.Text("title")));
+        cmds.Add().Text("Text(provider)").Clicked(() => dialog.EachChild(c => c.Text(() => title)));
+
+        cmds.Add().Text("Value()").Clicked(() => dialog.EachChild(c => c.Value(stringValue)));
+        cmds.Add().Text("Value(provider)").Clicked(() => dialog.EachChild(c => c.Value(() => c.Binder.Kind)));
+
+        cmds.Add().Text("Enable(value)").Clicked(() => dialog.EachChild(c => c.Enable(enable)));
+        cmds.Add().Text("Enable(provider)").Clicked(() => dialog.EachChild(c => c.Enable(() => enable)));
+
+        cmds.Add().Text("Clicked").Clicked(() => dialog.EachChild(c => c.Clicked(() => this.Toast(c.gameObject.name))));
+
+        cmds.Add().Text("SetXXX(value)").Clicked(() => dialog.EachChild(c =>
+        {
+            c.SetBool(boolValue);
+            c.SetInt(intValue);
+            c.SetFloat(floatValue);
+            c.SetString(stringValue);
+        }));
+
+        cmds.Add().Text("SetXXX(() => value)").Clicked(() => dialog.EachChild(c =>
+        {
+            c.SetBool(() => boolValue);
+            c.SetInt(() => intValue);
+            c.SetFloat(() => floatValue);
+            c.SetString(() => stringValue);
+        }));
+        
+        cmds.Add().Text("GetXXX()").Clicked(() => dialog.EachChild(c =>
+        {
+            c.gameObject.name = "";
+            c.gameObject.name += $"{c.GetBool()},";
+            c.gameObject.name += $"{c.GetInt()},";
+            c.gameObject.name += $"{c.GetFloat()},";
+            c.gameObject.name += $"{c.GetString()},";
+        }));
+
+        cmds.Add().Text("GetXXX((value) => {})").Clicked(() => dialog.EachChild(c =>
+        {
+            c.AddBoolListener(x => this.Toast($"Bool:{x}"));
+            c.AddIntListener(x => this.Toast($"Int:{x}"));
+            c.AddFloatListener(x => this.Toast($"Float:{x}"));
+            c.AddStringListener(x => this.Toast($"String:{x}"));
+        }));
+
+        cmds.Add().Text("inc").Clicked(() =>
+        {
+            enable = !enable;
+            intValue = (intValue + 1) % 10;
+            boolValue = !boolValue;
+            floatValue = intValue / 10f;
+            stringValue = $"string {intValue}";
+            title = $"title {intValue}";
+        });
+
+        ;
+    }
+}

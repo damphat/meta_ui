@@ -29,7 +29,7 @@ namespace MetaUI
 
         public WrapGameObject Clicked(Action click)
         {
-            gameObject.GetComponent<Button>().onClick.AddListener(() =>
+            AddClickedListener(() =>
             {
                 try
                 {
@@ -46,7 +46,7 @@ namespace MetaUI
 
         public WrapGameObject Clicked<R>(Func<R> click)
         {
-            gameObject.GetComponent<Button>().onClick.AddListener(() =>
+            AddClickedListener(() =>
             {
                 try
                 {
@@ -64,7 +64,7 @@ namespace MetaUI
 
         public WrapGameObject Clicked(Func<Task> click)
         {
-            gameObject.GetComponent<Button>().onClick.AddListener(async () =>
+            AddClickedListener(async () =>
             {
                 try
                 {
@@ -86,7 +86,7 @@ namespace MetaUI
 
         public WrapGameObject Clicked<R>(Func<Task<R>> click)
         {
-            gameObject.GetComponent<Button>().onClick.AddListener(async () =>
+            AddClickedListener(async () =>
             {
                 try
                 {
