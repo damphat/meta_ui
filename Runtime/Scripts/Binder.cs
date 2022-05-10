@@ -68,7 +68,7 @@ namespace MetaUI
         public string Load()
         {
             // TEXT
-            Title = Accessor<string>.Text(this.transform, "Title");
+            Title = Accessor.Text(this.transform, "Title");
             if (Title != null)
             {
                 return "Title";
@@ -78,9 +78,9 @@ namespace MetaUI
             _button = GetComponent<Button>();
             if (_button != null)
             {
-                Interactable = Accessor<bool>.Interactable(_button, "Interactable");
+                Interactable = Accessor.Interactable(_button, "Interactable");
                 // TODO GetComponentInChildren performance?
-                Title = Accessor<string>.Text(GetComponentInChildren<Text>(), "Title") ?? Accessor<string>.Text(GetComponentInChildren<TMP_Text>(), "Title");
+                Title = Accessor.Text(GetComponentInChildren<Text>(), "Title") ?? Accessor.Text(GetComponentInChildren<TMP_Text>(), "Title");
 
                 // TODO image button
                 return "Button";
@@ -91,9 +91,9 @@ namespace MetaUI
                 var inputField = this.GetComponent<InputField>();
                 if (inputField != null)
                 {
-                    ValueString = Accessor<string>.Input(inputField, "ValueString");
-                    Interactable = Accessor<bool>.Interactable(inputField, "Interactable");
-                    Title = Accessor<string>.Text(inputField.placeholder as Text, "Title");
+                    ValueString = Accessor.Input(inputField, "ValueString");
+                    Interactable = Accessor.Interactable(inputField, "Interactable");
+                    Title = Accessor.Text(inputField.placeholder as Text, "Title");
                     return "Input";
                 }
             }
@@ -101,43 +101,43 @@ namespace MetaUI
                 var tmp_InputField = this.GetComponent<TMP_InputField>();
                 if (tmp_InputField != null)
                 {
-                    ValueString = Accessor<string>.Input(tmp_InputField, "ValueString");
-                    Interactable = Accessor<bool>.Interactable(tmp_InputField, "Interactable");
-                    Title = Accessor<string>.Text(tmp_InputField.placeholder as TMP_Text, "Title"); // TODO TEST with Text
+                    ValueString = Accessor.Input(tmp_InputField, "ValueString");
+                    Interactable = Accessor.Interactable(tmp_InputField, "Interactable");
+                    Title = Accessor.Text(tmp_InputField.placeholder as TMP_Text, "Title"); // TODO TEST with Text
                     return "Input";
                 }
 
             }
 
             // DROPDOWN
-            ValueInt = Accessor<int>.Dropdown(this.transform, "ValueInt");
+            ValueInt = Accessor.Dropdown(this.transform, "ValueInt");
             if (ValueInt != null)
             {
-                Interactable = Accessor<bool>.Interactable(this.GetComponent<Selectable>(), "Interactable");
+                Interactable = Accessor.Interactable(this.GetComponent<Selectable>(), "Interactable");
                 return "Dropdown";
             }
 
 
             // SLIDER
-            ValueFloat = Accessor<float>.From(this.GetComponent<Slider>(), "ValueFloat");
+            ValueFloat = Accessor.From(this.GetComponent<Slider>(), "ValueFloat");
             if (ValueFloat != null)
             {
-                Interactable = Accessor<bool>.Interactable(this.GetComponent<Selectable>(), "Interactable");
+                Interactable = Accessor.Interactable(this.GetComponent<Selectable>(), "Interactable");
                 return "Slider";
             }
 
 
             // TOGGLE
-            ValueBool = Accessor<float>.From(this.GetComponent<Toggle>(), "ValueBool");
+            ValueBool = Accessor.From(this.GetComponent<Toggle>(), "ValueBool");
             if (ValueBool != null)
             {
-                Interactable = Accessor<bool>.Interactable(this.GetComponent<Selectable>(), "Interactable");
-                Title = Accessor<string>.Text(this.transform.Find("Label"), "Title");
+                Interactable = Accessor.Interactable(this.GetComponent<Selectable>(), "Interactable");
+                Title = Accessor.Text(this.transform.Find("Label"), "Title");
                 return "Toggle";
             }
 
             // IMAGE
-            Background = Accessor<Sprite>.From(this.GetComponent<Image>(), "Background");
+            Background = Accessor.From(this.GetComponent<Image>(), "Background");
             if (Background != null)
             {
                 return "Background";
@@ -180,39 +180,6 @@ namespace MetaUI
         {
             if (c == null) return null;
             return new Accessor<string>(() => c.text, value => c.text = value, null, c, name);
-        }
-
-    }
-    public class Accessor<T> : Accessor
-    {
-        
-        public Binder Binder { get; private set; }
-        public Component Component { get; private set; }
-        public string Name { get; private set; }
-        public bool IsNull { get; private set; }
-        private Func<T> getter;
-        private Action<T> setter;
-        private UnityEvent<T> ev;
-        private Func<T> provider;
-        private UnityAction<T> handler;
-
-        public override string ToString()
-        {
-            var sb = new StringBuilder();
-            if (Binder != null) sb.Append(Binder.name);
-            sb.Append('<');
-            if (Component != null) sb.Append(Component.GetType().Name);
-            sb.Append('>');
-            sb.Append('.');
-            sb.Append(Name);
-            sb.Append('=');
-            sb.Append(getter());
-            return sb.ToString();
-        }
-
-        public static Accessor<T> Null(string name)
-        {
-            return new Accessor<T>(() => default, value => { }, null, null, name);
         }
 
         public static Accessor<Sprite> From(Image c, string name)
@@ -274,6 +241,39 @@ namespace MetaUI
             if (transform == null) return null;
             return Input(transform.GetComponent<InputField>(), name) ?? Input(transform.GetComponent<TMP_InputField>(), name);
         }
+    }
+    public class Accessor<T> : Accessor
+    {
+        
+        public Binder Binder { get; private set; }
+        public Component Component { get; private set; }
+        public string Name { get; private set; }
+        public bool IsNull { get; private set; }
+        private Func<T> getter;
+        private Action<T> setter;
+        private UnityEvent<T> ev;
+        private Func<T> provider;
+        private UnityAction<T> handler;
+
+        public override string ToString()
+        {
+            var sb = new StringBuilder();
+            if (Binder != null) sb.Append(Binder.name);
+            sb.Append('<');
+            if (Component != null) sb.Append(Component.GetType().Name);
+            sb.Append('>');
+            sb.Append('.');
+            sb.Append(Name);
+            sb.Append('=');
+            sb.Append(getter());
+            return sb.ToString();
+        }
+
+        public static Accessor<T> Null(string name)
+        {
+            return new Accessor<T>(() => default, value => { }, null, null, name);
+        }
+
 
         public Accessor(Func<T> getter, Action<T> setter, UnityEvent<T> ev, Component c, string name)
         {
