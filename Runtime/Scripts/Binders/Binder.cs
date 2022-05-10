@@ -10,6 +10,7 @@ using UnityEngine.UI;
 namespace MetaUI
 {
     // TODO more lazy
+    // TODO dictionary of accessors
     [DisallowMultipleComponent]
     public class Binder : MonoBehaviour, IBinder
     {
@@ -135,6 +136,7 @@ namespace MetaUI
 
         public virtual void Update()
         {
+
             // TODO assembly reload will clear all state
             Title.Update();
             Description.Update();

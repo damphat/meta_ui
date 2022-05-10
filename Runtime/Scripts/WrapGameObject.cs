@@ -102,7 +102,7 @@ namespace MetaUI
 
         public override string ToString()
         {
-            return $"gameObject(${Path}, {Binder.Kind})";
+            return $"{Path}, {Binder}";
         }
 
         #endregion
