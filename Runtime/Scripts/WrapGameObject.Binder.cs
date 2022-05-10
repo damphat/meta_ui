@@ -30,23 +30,23 @@ namespace MetaUI
         }
 
         public string Kind => Binder.Kind;
-        public Accessor<string> Title => _binder.Title;
+        public Accessor<string> Title => Binder.Title;
 
-        public Accessor<string> Description => _binder.Description;
+        public Accessor<string> Description => Binder.Description;
 
-        public Accessor<Sprite> Background => _binder.Background;
+        public Accessor<Sprite> Background => Binder.Background;
 
-        public Accessor<Sprite> Icon => _binder.Icon;
+        public Accessor<Sprite> Icon => Binder.Icon;
 
-        public Accessor<string> ValueString => _binder.ValueString;
+        public Accessor<string> ValueString => Binder.ValueString;
 
-        public Accessor<bool> ValueBool => _binder.ValueBool;
+        public Accessor<bool> ValueBool => Binder.ValueBool;
 
-        public Accessor<int> ValueInt => _binder.ValueInt;
+        public Accessor<int> ValueInt => Binder.ValueInt;
 
-        public Accessor<float> ValueFloat => _binder.ValueFloat;
+        public Accessor<float> ValueFloat => Binder.ValueFloat;
 
-        public Accessor<bool> Interactable => _binder.Interactable;
+        public Accessor<bool> Interactable => Binder.Interactable;
 
 
         public void AddClickedListener(UnityAction action)
