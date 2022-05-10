@@ -12,13 +12,6 @@ namespace MetaUI
         public static float ConfigClickToastErrorSeconds = 3;
         public static float ConfigClickToastSuccessSeconds = 3;
 
-        public static WrapGameObject Canvas(string name = null)
-        {
-            var go = name == null ? Object.FindObjectOfType<Canvas>().gameObject : GameObject.Find(name);
-
-            return new WrapGameObject(go);
-        }
-
         public static WrapGameObject Get(string qs)
         {
             var tr = Query.Get(null, qs);
