@@ -8,10 +8,6 @@ namespace MetaUI
 {
     public class Accessor<T> : Accessor
     {
-        public Binder Binder { get; }
-        public Component Component { get; }
-        public string Name { get; }
-        public bool IsNull { get; private set; }
         private readonly Func<T> getter;
         private readonly Action<T> setter;
         private readonly UnityEvent<T> ev;
@@ -39,10 +35,8 @@ namespace MetaUI
 
 
         public Accessor(Func<T> getter, Action<T> setter, UnityEvent<T> ev, Component c, string name)
+            : base(c, name)
         {
-            Binder = CurrentBinder;
-            Name = name;
-            Component = c;
             this.getter = getter;
             this.setter = setter;
             this.ev = ev;
@@ -90,7 +84,7 @@ namespace MetaUI
             }
         }
 
-        public void Update()
+        public override void Update()
         {
             // TODO bounce
             if (provider != null)

@@ -7,6 +7,17 @@ namespace MetaUI
     public abstract class Accessor
     {
         public static Binder CurrentBinder;
+        public Binder Binder { get; }
+        public Component Component { get; }
+        public string Name { get; }
+
+        protected Accessor(Component c, string name)
+        {
+            this.Binder = CurrentBinder;
+            this.Name = name;
+            this.Component = c;
+        }
+
 
         public static Accessor<string> Text(Transform go, string name)
         {
@@ -81,11 +92,6 @@ namespace MetaUI
             return new Accessor<string>(() => c.text, value => c.text = value, c.onValueChanged, c, name);
         }
 
-        public static Accessor<string> Input(Transform transform, string name)
-        {
-            if (transform == null) return null;
-            return Input(transform.GetComponent<InputField>(), name) ??
-                   Input(transform.GetComponent<TMP_InputField>(), name);
-        }
+        public abstract void Update();
     }
 }
