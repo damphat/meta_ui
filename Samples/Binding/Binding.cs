@@ -16,7 +16,10 @@ public class Binding : MonoBehaviour
         var dialog = this.Get("dialog");
         var cmds = this.Get("commands");
 
-        cmds.Add().Text("Text(value)").Clicked(() => dialog.EachChild(c => c.Text(title)));
+        cmds.Add().Text("Text(value)").Clicked(() => dialog.EachChild(c =>
+        {
+            c.Text(title);
+        }));
         cmds.Add().Text("Text(provider)").Clicked(() => dialog.EachChild(c => c.Text(() => title)));
 
         cmds.Add().Text("Value()").Clicked(() => dialog.EachChild(c => c.Value(stringValue)));
@@ -29,6 +32,13 @@ public class Binding : MonoBehaviour
 
         cmds.Add().Text("SetXXX(value)").Clicked(() => dialog.EachChild(c =>
         {
+            var t = c.Title;
+            if (t == null)
+            {
+                Debug.Log("null");
+            }
+            t.Set("xx");
+
             c.Title.Set(title);
             c.Background.Set(icon);
             c.ValueBool.Set(boolValue);
@@ -39,6 +49,7 @@ public class Binding : MonoBehaviour
 
         cmds.Add().Text("SetXXX(() => value)").Clicked(() => dialog.EachChild(c =>
         {
+
             c.Title.Set(() => title);
             c.Background.Set(() => icon);
             c.ValueBool.Set(() => boolValue);
