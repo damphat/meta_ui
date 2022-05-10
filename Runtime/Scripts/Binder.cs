@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
+using Codice.CM.Common;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
@@ -79,7 +80,7 @@ namespace MetaUI
             {
                 Interactable = Accessor<bool>.Interactable(_button, "Interactable");
                 // TODO GetComponentInChildren performance?
-                Title = Accessor<string>.Text(GetComponentInChildren<Text>(), "Title") ?? Accessor<string>.Text(GetComponent<TMP_Text>(), "Title");
+                Title = Accessor<string>.Text(GetComponentInChildren<Text>(), "Title") ?? Accessor<string>.Text(GetComponentInChildren<TMP_Text>(), "Title");
 
                 // TODO image button
                 return "Button";
@@ -159,8 +160,32 @@ namespace MetaUI
         }
     }
 
-    public class Accessor<T>
+    public class Accessor
     {
+        public static Binder CurrentBinder;
+
+        public static Accessor<string> Text(Transform go, string name)
+        {
+            if (go == null) return null;
+            return Text(go.GetComponent<Text>(), name) ?? Text(go.GetComponent<TMP_Text>(), name);
+        }
+
+        public static Accessor<string> Text(Text c, string name)
+        {
+            if (c == null) return null;
+            return new Accessor<string>(() => c.text, value => c.text = value, null, c, name);
+        }
+
+        public static Accessor<string> Text(TMP_Text c, string name)
+        {
+            if (c == null) return null;
+            return new Accessor<string>(() => c.text, value => c.text = value, null, c, name);
+        }
+
+    }
+    public class Accessor<T> : Accessor
+    {
+        
         public Binder Binder { get; private set; }
         public Component Component { get; private set; }
         public string Name { get; private set; }
@@ -188,24 +213,6 @@ namespace MetaUI
         public static Accessor<T> Null(string name)
         {
             return new Accessor<T>(() => default, value => { }, null, null, name);
-        }
-
-        public static Accessor<string> Text(Transform go, string name)
-        {
-            if (go == null) return null;
-            return Text(go.GetComponent<Text>(), name) ?? Text(go.GetComponent<TMP_Text>(), name);
-        }
-
-        public static Accessor<string> Text(Text c, string name)
-        {
-            if (c == null) return null;
-            return new Accessor<string>(() => c.text, value => c.text = value, null, c, name);
-        }
-
-        public static Accessor<string> Text(TMP_Text c, string name)
-        {
-            if (c == null) return null;
-            return new Accessor<string>(() => c.text, value => c.text = value, null, c, name);
         }
 
         public static Accessor<Sprite> From(Image c, string name)
@@ -270,6 +277,7 @@ namespace MetaUI
 
         public Accessor(Func<T> getter, Action<T> setter, UnityEvent<T> ev, Component c, string name)
         {
+            this.Binder = Accessor.CurrentBinder;
             this.Name = name;
             this.Component = c;
             this.getter = getter;
@@ -295,8 +303,12 @@ namespace MetaUI
         public void Set(T value)
         {
             provider = null;
-            // TODO don't set the same value?
-            setter(value);
+
+            // TODO add an option that allow to set the same values?
+            if (!EqualityComparer<T>.Default.Equals(value, getter()))
+            {
+                setter(value);
+            }
         }
 
         // TODO what if call multiple times Set(() => 1);
@@ -306,21 +318,29 @@ namespace MetaUI
             {
                 this.provider = provider;
 
-                if (this.provider != null) setter(this.provider());
+                if (this.provider != null)
+                {
+                    var p = provider();
+                    if (!EqualityComparer<T>.Default.Equals(p, getter()))
+                    {
+                        setter(p);
+                    }
+
+                }
             }
         }
 
         public void Update()
         {
             // TODO bounce
-            if (provider == null) return;
-
-            
-
-            var p = provider();
-            if (!EqualityComparer<T>.Default.Equals(p, getter()))
+            if (this.provider != null)
             {
-                setter(p);
+                var p = provider();
+                if (!EqualityComparer<T>.Default.Equals(p, getter()))
+                {
+                    setter(p);
+                }
+
             }
 
         }
