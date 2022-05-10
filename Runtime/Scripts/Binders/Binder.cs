@@ -150,7 +150,7 @@ namespace MetaUI
         public override string ToString()
         {
             var sb = new StringBuilder();
-            sb.Append(this.name);
+            sb.Append(name);
             sb.AppendLine(Title.ToString());
             sb.AppendLine(Description.ToString());
             sb.AppendLine(Background.ToString());

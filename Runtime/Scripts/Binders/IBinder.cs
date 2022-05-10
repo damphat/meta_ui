@@ -1,9 +1,8 @@
-﻿using System;
-using UnityEngine;
-using UnityEngine.Events;
+﻿using UnityEngine;
 
 namespace MetaUI
 {
+    // TODO: Accessor<bool> Active
     public interface IBinder
     {
         string Kind { get; }
@@ -16,6 +15,5 @@ namespace MetaUI
         Accessor<int> ValueInt { get; }
         Accessor<float> ValueFloat { get; }
         Accessor<bool> Interactable { get; }
-
     }
 }

@@ -13,9 +13,9 @@ namespace MetaUI
 
         protected Accessor(Component c, string name)
         {
-            this.Binder = CurrentBinder;
-            this.Name = name;
-            this.Component = c;
+            Binder = CurrentBinder;
+            Name = name;
+            Component = c;
         }
 
 

@@ -1,6 +1,5 @@
 #region using
 
-using System;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -11,7 +10,8 @@ namespace MetaUI
     // TODO: Wrap multiple gameObject
     public partial class WrapGameObject : IBinder
     {
-        private Binder _binder; 
+        private Binder _binder;
+
         public Binder Binder
         {
             get
@@ -19,10 +19,7 @@ namespace MetaUI
                 if (_binder == null)
                 {
                     _binder = gameObject.GetComponent<Binder>();
-                    if (_binder == null)
-                    {
-                        _binder = gameObject.AddComponent<Binder>();
-                    }
+                    if (_binder == null) _binder = gameObject.AddComponent<Binder>();
                 }
 
                 return _binder;

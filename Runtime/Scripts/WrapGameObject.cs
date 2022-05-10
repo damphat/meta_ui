@@ -1,10 +1,8 @@
 #region using
 
 using System;
-using Codice.CM.Common.Tree.Partial;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.UI;
 using Object = UnityEngine.Object;
 
 #endregion
@@ -29,10 +27,7 @@ namespace MetaUI
             var item = gameObject.transform.Find(template ?? "Item").gameObject;
             var go = Object.Instantiate(item, gameObject.transform);
             go.SetActive(true);
-            if (name != null)
-            {
-                go.name = name;
-            }
+            if (name != null) go.name = name;
 
             return new WrapGameObject(go);
         }
@@ -53,13 +48,13 @@ namespace MetaUI
 
         public WrapGameObject Enable(bool value)
         {
-            this.Binder.Interactable.Set(value);
+            Binder.Interactable.Set(value);
             return this;
         }
 
         public WrapGameObject Enable(Func<bool> provider)
         {
-            this.Binder.Interactable.Set(provider);
+            Binder.Interactable.Set(provider);
             return this;
         }
 
@@ -70,19 +65,19 @@ namespace MetaUI
 
         public WrapGameObject Disable(Func<bool> provider)
         {
-            this.Binder.Interactable.Set(() => !provider());
+            Binder.Interactable.Set(() => !provider());
             return this;
         }
 
         public virtual WrapGameObject Text(string text)
         {
-            this.Binder.Title.Set(text);
+            Binder.Title.Set(text);
             return this;
         }
 
         public virtual WrapGameObject Text(Func<string> provider)
         {
-            this.Binder.Title.Set(provider);
+            Binder.Title.Set(provider);
             return this;
         }
 

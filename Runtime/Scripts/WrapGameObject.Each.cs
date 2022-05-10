@@ -2,7 +2,6 @@
 
 using System;
 using UnityEngine;
-using UnityEngine.Events;
 
 #endregion
 
@@ -12,10 +11,7 @@ namespace MetaUI
     {
         public WrapGameObject EachChild(Action<WrapGameObject> action)
         {
-            foreach(Transform transform in gameObject.transform)
-            {
-                action(this.From(transform));
-            }
+            foreach (Transform transform in gameObject.transform) action(From(transform));
 
             return this;
         }

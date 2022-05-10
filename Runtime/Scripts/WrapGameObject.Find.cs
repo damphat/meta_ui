@@ -8,6 +8,7 @@ namespace MetaUI
         {
             return new WrapGameObject(c.gameObject);
         }
+
         public WrapGameObject Get(string qs)
         {
             var go = Query.Get(gameObject.transform, qs);

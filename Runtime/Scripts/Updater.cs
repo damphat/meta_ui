@@ -1,7 +1,6 @@
 ﻿#region using
 
 using System.Collections.Generic;
-using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -26,10 +25,7 @@ namespace MetaUI
 
         private void Update()
         {
-            foreach (var action in _updateDictionary.Values)
-            {
-                action?.Invoke();
-            }
+            foreach (var action in _updateDictionary.Values) action?.Invoke();
         }
 
         public void Set(string key, UnityAction action)
@@ -41,11 +37,12 @@ namespace MetaUI
         {
             return null;
         }
+
         public bool? Checked()
         {
             return null;
         }
-        
+
         public string Caption()
         {
             return null;

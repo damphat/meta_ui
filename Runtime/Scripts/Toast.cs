@@ -33,10 +33,7 @@ namespace MetaUI
 
         private static void ToastInit()
         {
-            if (_toastCanvas != null)
-            {
-                return;
-            }
+            if (_toastCanvas != null) return;
 
             _toastCanvas = GameObject.Find("Toast Canvas");
 
@@ -54,15 +51,9 @@ namespace MetaUI
 
         public static string Format(object msg)
         {
-            if (msg == null)
-            {
-                return "null";
-            }
+            if (msg == null) return "null";
 
-            if (Formatter.ContainsKey(msg.GetType()))
-            {
-                return Formatter[msg.GetType()](msg);
-            }
+            if (Formatter.ContainsKey(msg.GetType())) return Formatter[msg.GetType()](msg);
 
             return msg.ToString();
         }

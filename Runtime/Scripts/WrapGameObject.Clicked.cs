@@ -3,7 +3,6 @@
 using System;
 using System.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.UI;
 
 #endregion
 
@@ -13,18 +12,12 @@ namespace MetaUI
     {
         private void ToastError(object message)
         {
-            if (UI.ConfigClickToastErrorSeconds > 0)
-            {
-                Toast.Error(message, UI.ConfigClickToastErrorSeconds);
-            }
+            if (UI.ConfigClickToastErrorSeconds > 0) Toast.Error(message, UI.ConfigClickToastErrorSeconds);
         }
 
         private void ToastSuccess(object message)
         {
-            if (UI.ConfigClickToastSuccessSeconds > 0)
-            {
-                Toast.Success(message, UI.ConfigClickToastSuccessSeconds);
-            }
+            if (UI.ConfigClickToastSuccessSeconds > 0) Toast.Success(message, UI.ConfigClickToastSuccessSeconds);
         }
 
         public WrapGameObject Clicked(Action click)
