@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Text;
-using Codice.CM.Common;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
@@ -13,7 +11,6 @@ using UnityEngine.UI;
 
 namespace MetaUI
 {
-
     // TODO more laze
     [DisallowMultipleComponent]
     public class Binder : MonoBehaviour, IBinder
@@ -22,12 +19,12 @@ namespace MetaUI
 
         public Accessor<string> Title { get; private set; }
         public Accessor<string> Description { get; private set; }
-        public Accessor<Sprite> Background { get; private set; } 
-        public Accessor<Sprite> Icon { get; private set; } 
-        public Accessor<string> ValueString { get; private set; } 
-        public Accessor<bool> ValueBool { get; private set; } 
+        public Accessor<Sprite> Background { get; private set; }
+        public Accessor<Sprite> Icon { get; private set; }
+        public Accessor<string> ValueString { get; private set; }
+        public Accessor<bool> ValueBool { get; private set; }
         public Accessor<int> ValueInt { get; private set; }
-        public Accessor<float> ValueFloat { get; private set; } 
+        public Accessor<float> ValueFloat { get; private set; }
         public Accessor<bool> Interactable { get; private set; }
 
         protected Button _button;
@@ -36,14 +33,10 @@ namespace MetaUI
 
         public virtual void AddClickedListener(UnityAction action)
         {
-            if (_button)
-            {
-                _button.onClick.AddListener(action);
-            }
+            if (_button) _button.onClick.AddListener(action);
         }
 
         #endregion
-
 
 
         private void Awake()
@@ -68,11 +61,8 @@ namespace MetaUI
         public string Load()
         {
             // TEXT
-            Title = Accessor.Text(this.transform, "Title");
-            if (Title != null)
-            {
-                return "Title";
-            }
+            Title = Accessor.Text(transform, "Title");
+            if (Title != null) return "Title";
 
             // BUTTON
             _button = GetComponent<Button>();
@@ -80,7 +70,8 @@ namespace MetaUI
             {
                 Interactable = Accessor.Interactable(_button, "Interactable");
                 // TODO GetComponentInChildren performance?
-                Title = Accessor.Text(GetComponentInChildren<Text>(), "Title") ?? Accessor.Text(GetComponentInChildren<TMP_Text>(), "Title");
+                Title = Accessor.Text(GetComponentInChildren<Text>(), "Title") ??
+                        Accessor.Text(GetComponentInChildren<TMP_Text>(), "Title");
 
                 // TODO image button
                 return "Button";
@@ -88,7 +79,7 @@ namespace MetaUI
 
             // INPUT
             {
-                var inputField = this.GetComponent<InputField>();
+                var inputField = GetComponent<InputField>();
                 if (inputField != null)
                 {
                     ValueString = Accessor.Input(inputField, "ValueString");
@@ -98,7 +89,7 @@ namespace MetaUI
                 }
             }
             {
-                var tmp_InputField = this.GetComponent<TMP_InputField>();
+                var tmp_InputField = GetComponent<TMP_InputField>();
                 if (tmp_InputField != null)
                 {
                     ValueString = Accessor.Input(tmp_InputField, "ValueString");
@@ -106,42 +97,38 @@ namespace MetaUI
                     Title = Accessor.Text(tmp_InputField.placeholder as TMP_Text, "Title"); // TODO TEST with Text
                     return "Input";
                 }
-
             }
 
             // DROPDOWN
-            ValueInt = Accessor.Dropdown(this.transform, "ValueInt");
+            ValueInt = Accessor.Dropdown(transform, "ValueInt");
             if (ValueInt != null)
             {
-                Interactable = Accessor.Interactable(this.GetComponent<Selectable>(), "Interactable");
+                Interactable = Accessor.Interactable(GetComponent<Selectable>(), "Interactable");
                 return "Dropdown";
             }
 
 
             // SLIDER
-            ValueFloat = Accessor.From(this.GetComponent<Slider>(), "ValueFloat");
+            ValueFloat = Accessor.From(GetComponent<Slider>(), "ValueFloat");
             if (ValueFloat != null)
             {
-                Interactable = Accessor.Interactable(this.GetComponent<Selectable>(), "Interactable");
+                Interactable = Accessor.Interactable(GetComponent<Selectable>(), "Interactable");
                 return "Slider";
             }
 
 
             // TOGGLE
-            ValueBool = Accessor.From(this.GetComponent<Toggle>(), "ValueBool");
+            ValueBool = Accessor.From(GetComponent<Toggle>(), "ValueBool");
             if (ValueBool != null)
             {
-                Interactable = Accessor.Interactable(this.GetComponent<Selectable>(), "Interactable");
-                Title = Accessor.Text(this.transform.Find("Label"), "Title");
+                Interactable = Accessor.Interactable(GetComponent<Selectable>(), "Interactable");
+                Title = Accessor.Text(transform.Find("Label"), "Title");
                 return "Toggle";
             }
 
             // IMAGE
-            Background = Accessor.From(this.GetComponent<Image>(), "Background");
-            if (Background != null)
-            {
-                return "Background";
-            }
+            Background = Accessor.From(GetComponent<Image>(), "Background");
+            if (Background != null) return "Background";
 
             return null;
         }
@@ -215,7 +202,8 @@ namespace MetaUI
         public static Accessor<int> Dropdown(Transform transform, string name)
         {
             if (transform == null) return null;
-            return Dropdown(transform.GetComponent<Dropdown>(), name) ?? Dropdown(transform.GetComponent<TMP_Dropdown>(), name);
+            return Dropdown(transform.GetComponent<Dropdown>(), name) ??
+                   Dropdown(transform.GetComponent<TMP_Dropdown>(), name);
         }
 
         public static Accessor<float> From(Slider c, string name)
@@ -239,19 +227,20 @@ namespace MetaUI
         public static Accessor<string> Input(Transform transform, string name)
         {
             if (transform == null) return null;
-            return Input(transform.GetComponent<InputField>(), name) ?? Input(transform.GetComponent<TMP_InputField>(), name);
+            return Input(transform.GetComponent<InputField>(), name) ??
+                   Input(transform.GetComponent<TMP_InputField>(), name);
         }
     }
+
     public class Accessor<T> : Accessor
     {
-        
-        public Binder Binder { get; private set; }
-        public Component Component { get; private set; }
-        public string Name { get; private set; }
+        public Binder Binder { get; }
+        public Component Component { get; }
+        public string Name { get; }
         public bool IsNull { get; private set; }
-        private Func<T> getter;
-        private Action<T> setter;
-        private UnityEvent<T> ev;
+        private readonly Func<T> getter;
+        private readonly Action<T> setter;
+        private readonly UnityEvent<T> ev;
         private Func<T> provider;
         private UnityAction<T> handler;
 
@@ -277,15 +266,19 @@ namespace MetaUI
 
         public Accessor(Func<T> getter, Action<T> setter, UnityEvent<T> ev, Component c, string name)
         {
-            this.Binder = Accessor.CurrentBinder;
-            this.Name = name;
-            this.Component = c;
+            Binder = CurrentBinder;
+            Name = name;
+            Component = c;
             this.getter = getter;
             this.setter = setter;
             this.ev = ev;
         }
 
-        public T Get() => getter();
+        public T Get()
+        {
+            return getter();
+        }
+
         public void Get(UnityAction<T> handler, bool replace = true)
         {
             if (ev == null) return;
@@ -305,10 +298,7 @@ namespace MetaUI
             provider = null;
 
             // TODO add an option that allow to set the same values?
-            if (!EqualityComparer<T>.Default.Equals(value, getter()))
-            {
-                setter(value);
-            }
+            if (!EqualityComparer<T>.Default.Equals(value, getter())) setter(value);
         }
 
         // TODO what if call multiple times Set(() => 1);
@@ -321,11 +311,7 @@ namespace MetaUI
                 if (this.provider != null)
                 {
                     var p = provider();
-                    if (!EqualityComparer<T>.Default.Equals(p, getter()))
-                    {
-                        setter(p);
-                    }
-
+                    if (!EqualityComparer<T>.Default.Equals(p, getter())) setter(p);
                 }
             }
         }
@@ -333,18 +319,11 @@ namespace MetaUI
         public void Update()
         {
             // TODO bounce
-            if (this.provider != null)
+            if (provider != null)
             {
                 var p = provider();
-                if (!EqualityComparer<T>.Default.Equals(p, getter()))
-                {
-                    setter(p);
-                }
-
+                if (!EqualityComparer<T>.Default.Equals(p, getter())) setter(p);
             }
-
         }
-
     }
-
 }
