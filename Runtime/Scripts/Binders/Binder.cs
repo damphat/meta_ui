@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using System.Text;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -8,7 +9,7 @@ using UnityEngine.UI;
 
 namespace MetaUI
 {
-    // TODO more laze
+    // TODO more lazy
     [DisallowMultipleComponent]
     public class Binder : MonoBehaviour, IBinder
     {
@@ -28,7 +29,7 @@ namespace MetaUI
 
         #region Clicked
 
-        // TODO imporove this
+        // TODO improve this
         public virtual void AddClickedListener(UnityAction action)
         {
             if (_button) _button.onClick.AddListener(action);
@@ -46,34 +47,34 @@ namespace MetaUI
 
         private void ConvertNullToNullObjects()
         {
-            Title ??= Accessor<string>.Null("Title");
-            Description ??= Accessor<string>.Null("Description");
-            Background ??= Accessor<Sprite>.Null("Background");
-            Icon ??= Accessor<Sprite>.Null("Icon");
-            ValueString ??= Accessor<string>.Null("ValueString");
-            ValueBool ??= Accessor<bool>.Null("ValueBool");
-            ValueInt ??= Accessor<int>.Null("ValueInt");
-            ValueFloat ??= Accessor<float>.Null("ValueFloat");
-            Interactable ??= Accessor<bool>.Null("Interactable");
+            Title ??= Accessor<string>.Null(nameof(Title));
+            Description ??= Accessor<string>.Null(nameof(Description));
+            Background ??= Accessor<Sprite>.Null(nameof(Background));
+            Icon ??= Accessor<Sprite>.Null(nameof(Icon));
+            ValueString ??= Accessor<string>.Null(nameof(ValueString));
+            ValueBool ??= Accessor<bool>.Null(nameof(ValueBool));
+            ValueInt ??= Accessor<int>.Null(nameof(ValueInt));
+            ValueFloat ??= Accessor<float>.Null(nameof(ValueFloat));
+            Interactable ??= Accessor<bool>.Null(nameof(Interactable));
         }
 
         private string HeuristicBinding()
         {
             // TEXT
-            Title = Accessor.Text(transform, "Title");
-            if (Title != null) return "Title";
+            Title = Accessor.Text(transform, nameof(Title));
+            if (Title != null) return nameof(Title);
 
             // BUTTON
             _button = GetComponent<Button>();
             if (_button != null)
             {
-                Interactable = Accessor.Interactable(_button, "Interactable");
+                Interactable = Accessor.Interactable(_button, nameof(Interactable));
                 // TODO GetComponentInChildren performance?
-                Title = Accessor.Text(GetComponentInChildren<Text>(), "Title") ??
-                        Accessor.Text(GetComponentInChildren<TMP_Text>(), "Title");
+                Title = Accessor.Text(GetComponentInChildren<Text>(), nameof(Title)) ??
+                        Accessor.Text(GetComponentInChildren<TMP_Text>(), nameof(Title));
 
                 // TODO image button
-                return "Button";
+                return nameof(Button);
             }
 
             // INPUT
@@ -81,53 +82,53 @@ namespace MetaUI
                 var inputField = GetComponent<InputField>();
                 if (inputField != null)
                 {
-                    ValueString = Accessor.Input(inputField, "ValueString");
-                    Interactable = Accessor.Interactable(inputField, "Interactable");
-                    Title = Accessor.Text(inputField.placeholder as Text, "Title");
-                    return "Input";
+                    ValueString = Accessor.Input(inputField, nameof(ValueString));
+                    Interactable = Accessor.Interactable(inputField, nameof(Interactable));
+                    Title = Accessor.Text(inputField.placeholder as Text, nameof(Title));
+                    return nameof(Input);
                 }
             }
             {
                 var tmp_InputField = GetComponent<TMP_InputField>();
                 if (tmp_InputField != null)
                 {
-                    ValueString = Accessor.Input(tmp_InputField, "ValueString");
-                    Interactable = Accessor.Interactable(tmp_InputField, "Interactable");
-                    Title = Accessor.Text(tmp_InputField.placeholder as TMP_Text, "Title"); // TODO TEST with Text
-                    return "Input";
+                    ValueString = Accessor.Input(tmp_InputField, nameof(ValueString));
+                    Interactable = Accessor.Interactable(tmp_InputField, nameof(Interactable));
+                    Title = Accessor.Text(tmp_InputField.placeholder as TMP_Text, nameof(Title)); // TODO TEST with Text
+                    return nameof(Input);
                 }
             }
 
             // DROPDOWN
-            ValueInt = Accessor.Dropdown(transform, "ValueInt");
+            ValueInt = Accessor.Dropdown(transform, nameof(ValueInt));
             if (ValueInt != null)
             {
-                Interactable = Accessor.Interactable(GetComponent<Selectable>(), "Interactable");
-                return "Dropdown";
+                Interactable = Accessor.Interactable(GetComponent<Selectable>(), nameof(Interactable));
+                return nameof(Dropdown);
             }
 
 
             // SLIDER
-            ValueFloat = Accessor.From(GetComponent<Slider>(), "ValueFloat");
+            ValueFloat = Accessor.From(GetComponent<Slider>(), nameof(ValueFloat));
             if (ValueFloat != null)
             {
-                Interactable = Accessor.Interactable(GetComponent<Selectable>(), "Interactable");
-                return "Slider";
+                Interactable = Accessor.Interactable(GetComponent<Selectable>(), nameof(Interactable));
+                return nameof(Slider);
             }
 
 
             // TOGGLE
-            ValueBool = Accessor.From(GetComponent<Toggle>(), "ValueBool");
+            ValueBool = Accessor.From(GetComponent<Toggle>(), nameof(ValueBool));
             if (ValueBool != null)
             {
-                Interactable = Accessor.Interactable(GetComponent<Selectable>(), "Interactable");
-                Title = Accessor.Text(transform.Find("Label"), "Title");
-                return "Toggle";
+                Interactable = Accessor.Interactable(GetComponent<Selectable>(), nameof(Interactable));
+                Title = Accessor.Text(transform.Find("Label"), nameof(Title));
+                return nameof(Toggle);
             }
 
             // IMAGE
-            Background = Accessor.From(GetComponent<Image>(), "Background");
-            if (Background != null) return "Background";
+            Background = Accessor.From(GetComponent<Image>(), nameof(Background));
+            if (Background != null) return nameof(Background);
 
             return null;
         }
@@ -144,6 +145,23 @@ namespace MetaUI
             ValueInt.Update();
             ValueFloat.Update();
             Interactable.Update();
+        }
+
+        public override string ToString()
+        {
+            var sb = new StringBuilder();
+            sb.Append(this.name);
+            sb.AppendLine(Title.ToString());
+            sb.AppendLine(Description.ToString());
+            sb.AppendLine(Background.ToString());
+            sb.AppendLine(Icon.ToString());
+            sb.AppendLine(ValueString.ToString());
+            sb.AppendLine(ValueBool.ToString());
+            sb.AppendLine(ValueInt.ToString());
+            sb.AppendLine(ValueFloat.ToString());
+            sb.AppendLine(Interactable.ToString());
+
+            return sb.ToString();
         }
     }
 }
