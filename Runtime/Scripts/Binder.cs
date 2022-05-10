@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Text;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
+
 // ReSharper disable InconsistentNaming
 
 
@@ -16,15 +19,15 @@ namespace MetaUI
     {
         public string Kind { get; private set; }
 
-        public Accessor<string> Title { get; private set; } = Accessor<string>.Null();
-        public Accessor<string> Description { get; private set; } = Accessor<string>.Null();
-        public Accessor<Sprite> Background { get; private set; } = Accessor<Sprite>.Null();
-        public Accessor<Sprite> Icon { get; private set; } = Accessor<Sprite>.Null();
-        public Accessor<string> ValueString { get; private set; } = Accessor<string>.Null();
-        public Accessor<bool> ValueBool { get; private set; } = Accessor<bool>.Null();
-        public Accessor<int> ValueInt { get; private set; } = Accessor<int>.Null();
-        public Accessor<float> ValueFloat { get; private set; } = Accessor<float>.Null();
-        public Accessor<bool> Interactable { get; private set; } = Accessor<bool>.Null();
+        public Accessor<string> Title { get; private set; }
+        public Accessor<string> Description { get; private set; }
+        public Accessor<Sprite> Background { get; private set; } 
+        public Accessor<Sprite> Icon { get; private set; } 
+        public Accessor<string> ValueString { get; private set; } 
+        public Accessor<bool> ValueBool { get; private set; } 
+        public Accessor<int> ValueInt { get; private set; }
+        public Accessor<float> ValueFloat { get; private set; } 
+        public Accessor<bool> Interactable { get; private set; }
 
         protected Button _button;
 
@@ -45,13 +48,26 @@ namespace MetaUI
         private void Awake()
         {
             Kind = Load();
+            LoadNull();
         }
 
+        public void LoadNull()
+        {
+            Title ??= Accessor<string>.Null("Title");
+            Description ??= Accessor<string>.Null("Description");
+            Background ??= Accessor<Sprite>.Null("Background");
+            Icon ??= Accessor<Sprite>.Null("Icon");
+            ValueString ??= Accessor<string>.Null("ValueString");
+            ValueBool ??= Accessor<bool>.Null("ValueBool");
+            ValueInt ??= Accessor<int>.Null("ValueInt");
+            ValueFloat ??= Accessor<float>.Null("ValueFloat");
+            Interactable ??= Accessor<bool>.Null("Interactable");
+        }
 
         public string Load()
         {
             // TEXT
-            Title = Accessor<string>.Text(this.transform);
+            Title = Accessor<string>.Text(this.transform, "Title");
             if (Title != null)
             {
                 return "Title";
@@ -61,55 +77,69 @@ namespace MetaUI
             _button = GetComponent<Button>();
             if (_button != null)
             {
-                Interactable = Accessor<bool>.Interactable(_button);
-                Title = Accessor<string>.Text(this.transform.Find("Text"));
+                Interactable = Accessor<bool>.Interactable(_button, "Interactable");
+                // TODO GetComponentInChildren performance?
+                Title = Accessor<string>.Text(GetComponentInChildren<Text>(), "Title") ?? Accessor<string>.Text(GetComponent<TMP_Text>(), "Title");
 
+                // TODO image button
                 return "Button";
             }
 
             // INPUT
-            ValueString = Accessor<string>.Input(this.transform);
-
-            if (ValueString != null)
             {
-                // TODO can be optimize a title bit
-                Interactable = Accessor<bool>.Interactable(this.GetComponent<Selectable>());
-                Title = Accessor<string>.Text(this.transform.Find("Placeholder"));
-                return "Input";
+                var inputField = this.GetComponent<InputField>();
+                if (inputField != null)
+                {
+                    ValueString = Accessor<string>.Input(inputField, "ValueString");
+                    Interactable = Accessor<bool>.Interactable(inputField, "Interactable");
+                    Title = Accessor<string>.Text(inputField.placeholder as Text, "Title");
+                    return "Input";
+                }
+            }
+            {
+                var tmp_InputField = this.GetComponent<TMP_InputField>();
+                if (tmp_InputField != null)
+                {
+                    ValueString = Accessor<string>.Input(tmp_InputField, "ValueString");
+                    Interactable = Accessor<bool>.Interactable(tmp_InputField, "Interactable");
+                    Title = Accessor<string>.Text(tmp_InputField.placeholder as TMP_Text, "Title"); // TODO TEST with Text
+                    return "Input";
+                }
+
             }
 
             // DROPDOWN
-            ValueInt = Accessor<int>.Dropdown(this.transform);
+            ValueInt = Accessor<int>.Dropdown(this.transform, "ValueInt");
             if (ValueInt != null)
             {
-                Interactable = Accessor<bool>.Interactable(this.GetComponent<Selectable>());
+                Interactable = Accessor<bool>.Interactable(this.GetComponent<Selectable>(), "Interactable");
                 return "Dropdown";
             }
 
 
             // SLIDER
-            ValueFloat = Accessor<float>.From(this.GetComponent<Slider>());
+            ValueFloat = Accessor<float>.From(this.GetComponent<Slider>(), "ValueFloat");
             if (ValueFloat != null)
             {
-                Interactable = Accessor<bool>.Interactable(this.GetComponent<Selectable>());
+                Interactable = Accessor<bool>.Interactable(this.GetComponent<Selectable>(), "Interactable");
                 return "Slider";
             }
 
 
             // TOGGLE
-            ValueBool = Accessor<float>.From(this.GetComponent<Toggle>());
+            ValueBool = Accessor<float>.From(this.GetComponent<Toggle>(), "ValueBool");
             if (ValueBool != null)
             {
-                Interactable = Accessor<bool>.Interactable(this.GetComponent<Selectable>());
-                Title = Accessor<string>.Text(this.transform.Find("Label"));
+                Interactable = Accessor<bool>.Interactable(this.GetComponent<Selectable>(), "Interactable");
+                Title = Accessor<string>.Text(this.transform.Find("Label"), "Title");
                 return "Toggle";
             }
 
             // IMAGE
-            Background = Accessor<Sprite>.From(this.GetComponent<Image>());
+            Background = Accessor<Sprite>.From(this.GetComponent<Image>(), "Background");
             if (Background != null)
             {
-                return "Toggle";
+                return "Background";
             }
 
             return null;
@@ -131,7 +161,9 @@ namespace MetaUI
 
     public class Accessor<T>
     {
-        public string Name { get; private set; } = "";
+        public Binder Binder { get; private set; }
+        public Component Component { get; private set; }
+        public string Name { get; private set; }
         public bool IsNull { get; private set; }
         private Func<T> getter;
         private Action<T> setter;
@@ -141,103 +173,105 @@ namespace MetaUI
 
         public override string ToString()
         {
-            var value = IsNull ? "null" : $"{getter()}";
-            return $"{this.Name}={value}";
+            var sb = new StringBuilder();
+            if (Binder != null) sb.Append(Binder.name);
+            sb.Append('<');
+            if (Component != null) sb.Append(Component.GetType().Name);
+            sb.Append('>');
+            sb.Append('.');
+            sb.Append(Name);
+            sb.Append('=');
+            sb.Append(getter());
+            return sb.ToString();
         }
 
-        public static Accessor<T> Null(string name = null)
+        public static Accessor<T> Null(string name)
         {
-            return new Accessor<T>(() => default, value => { }, null)
-            {
-                Name = name,
-                IsNull = true
-            };
+            return new Accessor<T>(() => default, value => { }, null, null, name);
         }
 
-        public static Accessor<string> Text(Transform go)
+        public static Accessor<string> Text(Transform go, string name)
         {
             if (go == null) return null;
-            return Text(go.GetComponent<Text>()) ?? Text(go.GetComponent<TMP_Text>());
+            return Text(go.GetComponent<Text>(), name) ?? Text(go.GetComponent<TMP_Text>(), name);
         }
 
-        public static Accessor<string> Text(Text c)
+        public static Accessor<string> Text(Text c, string name)
         {
             if (c == null) return null;
-            return new Accessor<string>(() => c.text, value => c.text = value, null);
+            return new Accessor<string>(() => c.text, value => c.text = value, null, c, name);
         }
 
-        public static Accessor<string> Text(TMP_Text c)
+        public static Accessor<string> Text(TMP_Text c, string name)
         {
             if (c == null) return null;
-            return new Accessor<string>(() => c.text, value => c.text = value, null);
+            return new Accessor<string>(() => c.text, value => c.text = value, null, c, name);
         }
 
-        public static Accessor<Sprite> From(Image c)
+        public static Accessor<Sprite> From(Image c, string name)
         {
             if (c == null) return null;
-            return new Accessor<Sprite>(() => c.sprite, value => c.sprite = value, null);
+            return new Accessor<Sprite>(() => c.sprite, value => c.sprite = value, null, c, name);
         }
 
-        public static Accessor<bool> Interactable(Selectable c)
+        public static Accessor<bool> Interactable(Selectable c, string name)
         {
             if (c == null) return null;
-            return new Accessor<bool>(() => c.interactable, value => c.interactable = value, null);
+            return new Accessor<bool>(() => c.interactable, value => c.interactable = value, null, c, name);
         }
 
-        public static Accessor<bool> From(Toggle c)
+        public static Accessor<bool> From(Toggle c, string name)
         {
             if (c == null) return null;
-            return new Accessor<bool>(() => c.isOn, value => c.isOn = value, c.onValueChanged);
+            return new Accessor<bool>(() => c.isOn, value => c.isOn = value, c.onValueChanged, c, name);
         }
 
-        public static Accessor<int> Dropdown(Dropdown c)
+        public static Accessor<int> Dropdown(Dropdown c, string name)
         {
             if (c == null) return null;
-            return new Accessor<int>(() => c.value, value => c.value = value, c.onValueChanged);
+            return new Accessor<int>(() => c.value, value => c.value = value, c.onValueChanged, c, name);
         }
 
-        public static Accessor<int> Dropdown(TMP_Dropdown c)
+        public static Accessor<int> Dropdown(TMP_Dropdown c, string name)
         {
             if (c == null) return null;
-            return new Accessor<int>(() => c.value, value => c.value = value, c.onValueChanged);
+            return new Accessor<int>(() => c.value, value => c.value = value, c.onValueChanged, c, name);
         }
 
-        public static Accessor<int> Dropdown(Transform transform)
+        public static Accessor<int> Dropdown(Transform transform, string name)
         {
             if (transform == null) return null;
-            return Dropdown(transform.GetComponent<Dropdown>()) ?? Dropdown(transform.GetComponent<TMP_Dropdown>());
+            return Dropdown(transform.GetComponent<Dropdown>(), name) ?? Dropdown(transform.GetComponent<TMP_Dropdown>(), name);
         }
 
-        public static Accessor<float> From(Slider c)
+        public static Accessor<float> From(Slider c, string name)
         {
             if (c == null) return null;
-            return new Accessor<float>(() => c.value, value => c.value = value, c.onValueChanged);
+            return new Accessor<float>(() => c.value, value => c.value = value, c.onValueChanged, c, name);
         }
 
-        public static Accessor<string> Input(InputField c)
+        public static Accessor<string> Input(InputField c, string name)
         {
             if (c == null) return null;
-            return new Accessor<string>(() => c.text, value => c.text = value, c.onValueChanged);
+            return new Accessor<string>(() => c.text, value => c.text = value, c.onValueChanged, c, name);
         }
 
-        public static Accessor<string> Input(TMP_InputField c)
+        public static Accessor<string> Input(TMP_InputField c, string name)
         {
             if (c == null) return null;
-            return new Accessor<string>(() => c.text, value => c.text = value, c.onValueChanged);
+            return new Accessor<string>(() => c.text, value => c.text = value, c.onValueChanged, c, name);
         }
 
-        public static Accessor<string> Input(Transform transform)
+        public static Accessor<string> Input(Transform transform, string name)
         {
             if (transform == null) return null;
-            return Input(transform.GetComponent<InputField>()) ?? Input(transform.GetComponent<TMP_InputField>());
+            return Input(transform.GetComponent<InputField>(), name) ?? Input(transform.GetComponent<TMP_InputField>(), name);
         }
 
-        public Accessor(Func<T> getter, Action<T> setter, UnityEvent<T> ev)
+        public Accessor(Func<T> getter, Action<T> setter, UnityEvent<T> ev, Component c, string name)
         {
-            if (setter == null || getter == null)
-            {
-                Debug.Break();
-            }
+            this.Name = name;
+            this.Component = c;
             this.getter = getter;
             this.setter = setter;
             this.ev = ev;
@@ -246,6 +280,8 @@ namespace MetaUI
         public T Get() => getter();
         public void Get(UnityAction<T> handler, bool replace = true)
         {
+            if (ev == null) return;
+
             if (this.handler != handler)
             {
                 if (replace && this.handler != null) ev.RemoveListener(this.handler);
@@ -279,10 +315,7 @@ namespace MetaUI
             // TODO bounce
             if (provider == null) return;
 
-            if (getter == null)
-            {
-                Debug.Break();
-            }
+            
 
             var p = provider();
             if (!EqualityComparer<T>.Default.Equals(p, getter()))
