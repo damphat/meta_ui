@@ -1,22 +1,21 @@
-
-
 using MetaUI;
 using NUnit.Framework;
 using UnityEngine.Events;
 
-public class EditMode_Accessor_Tests {
-    int _count;
+public class EditMode_Accessor_Tests
+{
+    private int _count;
     public Accessor<int> Count { get; private set; }
 
     [SetUp]
     public void SetUp()
     {
         var ev = new UnityEvent<int>();
-        
+
 
         _count = 1;
 
-        Count = new Accessor<int>(getter: () => _count, setter: v => _count = v, null, null, "Count");
+        Count = new Accessor<int>(() => _count, v => _count = v, null, null, "Count");
     }
 
     [Test]
@@ -57,7 +56,6 @@ public class EditMode_Accessor_Tests {
     [Test]
     public void Get_only()
     {
-
     }
 
     [Test]

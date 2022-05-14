@@ -1,18 +1,18 @@
 using System;
 using System.Collections.Generic;
 using NUnit.Framework;
-using UnityEngine;
 using UnityEngine.Events;
 
 public class EventTests
 {
-    private List<string> foo = new List<string>();
-    void Foo(string a)
+    private readonly List<string> foo = new List<string>();
+
+    private void Foo(string a)
     {
         foo.Add($"Foo({a})");
     }
 
-    void Bar(string a)
+    private void Bar(string a)
     {
         foo.Add($"Bar({a})");
     }
@@ -37,13 +37,12 @@ public class EventTests
         e.AddListener(Foo);
         e.Invoke("1");
 
-        Assert.AreEqual(new [] {"Foo(1)", "Foo(1)"}, foo);
+        Assert.AreEqual(new[] {"Foo(1)", "Foo(1)"}, foo);
 
         foo.Clear();
 
         e.RemoveListener(Foo);
         e.Invoke("2");
         Assert.AreEqual(Array.Empty<string>(), foo);
-
     }
 }

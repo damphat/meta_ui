@@ -1,10 +1,10 @@
 using MetaUI;
 using UnityEngine;
 
-
 public class ToastLifetimeEventsX : MonoBehaviour
 {
     public int count = 14;
+
     private void Reset()
     {
         this.Toast("Reset");
@@ -21,25 +21,19 @@ public class ToastLifetimeEventsX : MonoBehaviour
     }
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
-        
-            this.Toast("Start");
-        
+        this.Toast("Start");
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        if (count++ < 5)
-        {
-            this.Toast("Update");
-        }
+        if (count++ < 5) this.Toast("Update");
     }
 
     private void OnDisable()
     {
-
         this.Toast("OnDisable");
     }
 

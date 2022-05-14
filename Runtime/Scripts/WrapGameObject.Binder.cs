@@ -9,7 +9,7 @@ using UnityEngine.Events;
 namespace MetaUI
 {
     // TODO: Wrap multiple gameObject
-    public partial class WrapGameObject 
+    public partial class WrapGameObject
     {
         private AutoBinder _binder;
 
@@ -26,7 +26,7 @@ namespace MetaUI
                 return _binder;
             }
         }
-        
+
         public Entry<string> Title => Binder.Title;
 
         public Entry<Sprite> Background => Binder.Background;

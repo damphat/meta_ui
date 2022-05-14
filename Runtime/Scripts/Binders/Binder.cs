@@ -136,7 +136,6 @@ namespace MetaUI
 
         public virtual void Update()
         {
-
             // TODO assembly reload will clear all state
             Title.Update();
             Description.Update();

@@ -1,18 +1,18 @@
 {
-    "name": "MetaUI.Editor",
-    "rootNamespace": "",
-    "references": [
-        "GUID:1300059aef125f042a9ff6fce45f6b59"
-    ],
-    "includePlatforms": [
-        "Editor"
-    ],
-    "excludePlatforms": [],
-    "allowUnsafeCode": false,
-    "overrideReferences": false,
-    "precompiledReferences": [],
-    "autoReferenced": true,
-    "defineConstraints": [],
-    "versionDefines": [],
-    "noEngineReferences": false
+  "name": "MetaUI.Editor",
+  "rootNamespace": "",
+  "references": [
+    "GUID:1300059aef125f042a9ff6fce45f6b59"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
 }

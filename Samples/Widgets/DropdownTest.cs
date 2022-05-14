@@ -1,12 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using MetaUI;
 using UnityEngine;
 
 public class DropdownTest : MonoBehaviour
 {
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         var index = this.Value(0);
         var d1 = this.Get("Dropdown1");
@@ -17,14 +15,10 @@ public class DropdownTest : MonoBehaviour
 
         d1.ValueInt.Add(v => index.Set(v));
         d2.ValueInt.Add(v => index.Set(v));
-
-
-
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        
     }
 }

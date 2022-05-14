@@ -8,31 +8,23 @@ using UnityEngine.UI;
 
 namespace MetaUI.Generic
 {
-
     [DisallowMultipleComponent]
-    public class AutoBinder: MonoBehaviour
+    public class AutoBinder : MonoBehaviour
     {
         private Dictionary<string, Entry> _dict;
+
         public Dictionary<string, Entry> dict
         {
             get
             {
-                if (_dict == null)
-                {
-                    _dict = new Dictionary<string, Entry>();
-                    Detect();
-                }
-
+                Detect();
                 return _dict;
             }
-        } 
+        }
 
         public Entry<T> AddEntry<T>(string name, Func<T> getter, Action<T> setter, UnityEvent<T> changed)
         {
-            if (dict.ContainsKey(name))
-            {
-                throw new Exception($"{name} already exists");
-            }
+            if (dict.ContainsKey(name)) throw new Exception($"{name} already exists");
 
             var entry = new BindEntry<T>(name, getter, setter, changed);
             dict.Add(name, entry);
@@ -41,7 +33,7 @@ namespace MetaUI.Generic
 
         public Entry<string> AddEntry(string name, Text c)
         {
-            if(c == null) return null;
+            if (c == null) return null;
             return AddEntry(name, () => c.text, value => c.text = value, null);
         }
 
@@ -56,6 +48,7 @@ namespace MetaUI.Generic
             if (c == null) return null;
             return AddEntry(name, () => c.text, value => c.text = value, c.onValueChanged);
         }
+
         public Entry<string> AddEntry(string name, TMP_InputField c)
         {
             if (c == null) return null;
@@ -67,11 +60,13 @@ namespace MetaUI.Generic
             if (c == null) return null;
             return AddEntry(name, () => c.isOn, value => c.isOn = value, c.onValueChanged);
         }
+
         public Entry<bool> AddEntry(string name, Selectable c)
         {
             if (c == null) return null;
             return AddEntry(name, () => c.interactable, value => c.interactable = value, null);
         }
+
         public Entry<int> AddEntry(string name, Dropdown c)
         {
             if (c == null) return null;
@@ -96,7 +91,7 @@ namespace MetaUI.Generic
             return AddEntry(name, () => c.value, value => c.value = value, c.onValueChanged);
         }
 
-        
+
         public Entry<Sprite> AddEntry(string name, Image c)
         {
             if (c == null) return null;
@@ -104,13 +99,9 @@ namespace MetaUI.Generic
         }
 
 
-        
         public Entry<T> GetEntry<T>(string name)
         {
-            if (dict.TryGetValue(name, out var entry))
-            {
-                return (Entry<T>) entry;
-            }
+            if (dict.TryGetValue(name, out var entry)) return (Entry<T>) entry;
 
             return Entry<T>.Null;
         }
@@ -119,37 +110,31 @@ namespace MetaUI.Generic
         public Entry<string> String => GetEntry<string>("String");
         public Entry<bool> Bool => GetEntry<bool>("Bool");
         public Entry<int> Int => GetEntry<int>("Int");
-        public Entry<float> Float=> GetEntry<float>("Float");
+        public Entry<float> Float => GetEntry<float>("Float");
         public Entry<bool> Interactable => GetEntry<bool>("Interactable");
         public Entry<Sprite> Background => GetEntry<Sprite>("Background");
 
         private UnityEvent clicked;
+
         public UnityEvent Clicked
         {
             get
             {
-                if (_dict == null)
-                {
-                    Detect();
-                    if (clicked == null)
-                    {
-                        clicked = new UnityEvent();
-                    }
-                }
-                
-                return clicked;
+                Detect();
+                return clicked ?? new UnityEvent();  
             }
         }
 
         public string Detect()
         {
+            if (_dict != null) return null;
+            
+            _dict = new Dictionary<string, Entry>();
+            
             // Text TMP_text
             {
                 var Title = AddEntry("Title", GetComponent<Text>()) ?? AddEntry("Title", GetComponent<TMP_Text>());
-                if (Title != null)
-                {
-                    return "Text";
-                }
+                if (Title != null) return "Text";
             }
 
             // Button
@@ -158,8 +143,9 @@ namespace MetaUI.Generic
                 if (button != null)
                 {
                     clicked = button.onClick;
-                    var Interactable = AddEntry("Interactable", (Selectable)button);
-                    var Title = AddEntry("Title", GetComponentInChildren<Text>()) ?? AddEntry("Title", GetComponentInChildren<TMP_Text>());
+                    var Interactable = AddEntry("Interactable", button);
+                    var Title = AddEntry("Title", GetComponentInChildren<Text>()) ??
+                                AddEntry("Title", GetComponentInChildren<TMP_Text>());
                     return "Button";
                 }
             }
@@ -169,10 +155,10 @@ namespace MetaUI.Generic
                 var toggle = GetComponent<Toggle>();
                 if (toggle != null)
                 {
-                    var Interactable = AddEntry("Interactable", (Selectable)toggle);
+                    var Interactable = AddEntry("Interactable", (Selectable) toggle);
                     var Bool = AddEntry("Bool", toggle);
                     var Title = AddEntry("Title", GetComponentInChildren<Text>()) ??
-                           AddEntry("Title", GetComponentInChildren<TMP_Text>());
+                                AddEntry("Title", GetComponentInChildren<TMP_Text>());
 
                     return "Toggle";
                 }
@@ -216,23 +202,22 @@ namespace MetaUI.Generic
                 var dropdown = GetComponent<TMP_Dropdown>();
                 if (dropdown != null)
                 {
-                    var Interactable = AddEntry("Interactable", (Selectable)dropdown);
+                    var Interactable = AddEntry("Interactable", (Selectable) dropdown);
                     var Int = AddEntry("Int", dropdown);
                     return "Dropdown";
                 }
             }
-        
+
             // InputField 
             {
                 var c = GetComponent<InputField>();
                 if (c != null)
                 {
-                    var Interactable = AddEntry("Interactable", (Selectable)c);
+                    var Interactable = AddEntry("Interactable", (Selectable) c);
                     var String = AddEntry("String", c);
                     var Title = AddEntry("Title", c.placeholder as Text);
                     return "InputField";
                 }
-
             }
 
             // TMP_InputField
@@ -240,7 +225,7 @@ namespace MetaUI.Generic
                 var c = GetComponent<TMP_InputField>();
                 if (c != null)
                 {
-                    var Interactable = AddEntry("Interactable", (Selectable)c);
+                    var Interactable = AddEntry("Interactable", (Selectable) c);
                     var String = AddEntry("String", c);
                     var Title = AddEntry("Title", c.placeholder as TMP_Text);
                     return "InputField";
@@ -255,13 +240,11 @@ namespace MetaUI.Generic
                     var Background = AddEntry("Background", c);
                     return "Image";
                 }
-
             }
 
             return "Unknown";
-
         }
-        
+
         public override string ToString()
         {
             var sb = new StringBuilder();
@@ -273,9 +256,9 @@ namespace MetaUI.Generic
                 sb.Append(e.Key).Append(": ").Append(e.Value.Get());
                 sb.AppendLine();
             }
+
             sb.Append('}');
             return sb.ToString();
         }
-        
     }
 }

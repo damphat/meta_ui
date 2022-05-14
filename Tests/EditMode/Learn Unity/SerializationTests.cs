@@ -1,12 +1,10 @@
-﻿using NUnit.Framework;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Runtime.ExceptionServices;
 using System.Text;
+using NUnit.Framework;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.Serialization;
 using Object = UnityEngine.Object;
 
 namespace MetaUI.Tests.EditMode.Learn_Unity
@@ -14,10 +12,6 @@ namespace MetaUI.Tests.EditMode.Learn_Unity
     [Serializable]
     public class MyClass : Object
     {
-        public MyClass()
-        {
-        }
-
         public void AddFooToMyEvent()
         {
             MyEvent = new UnityEvent();
@@ -35,12 +29,10 @@ namespace MetaUI.Tests.EditMode.Learn_Unity
     [Serializable]
     public class O : MonoBehaviour
     {
-        [SerializeField]
-        public string publicSerializeField = "damphat";
+        [SerializeField] public string publicSerializeField = "damphat";
         public string publicField = "damphat";
 
-        [SerializeField]
-        private string privateSerializeField = "damphat";
+        [SerializeField] private string privateSerializeField = "damphat";
         private string privateField = "damphat";
 
         public List<int> publicListInt1;
@@ -51,14 +43,14 @@ namespace MetaUI.Tests.EditMode.Learn_Unity
         public UnityEvent<int> clicked1;
         public UnityEvent<int> clicked2;
     }
+
     public class SerializationTests
     {
-        static string ConEm(SerializedProperty p, bool hasEm)
+        private static string ConEm(SerializedProperty p, bool hasEm)
         {
             p = p.Copy();
             try
             {
-                
                 //var n = p.CountInProperty();
 
                 // return $"{n}";
@@ -66,7 +58,7 @@ namespace MetaUI.Tests.EditMode.Learn_Unity
                 var con = p.Copy();
                 con.NextVisible(true);
                 var em = p.Copy();
-                if(hasEm) em.NextVisible(false);
+                if (hasEm) em.NextVisible(false);
                 return $"  (-- {con.name} -- {em.name})";
             }
             catch (Exception e)
@@ -74,13 +66,12 @@ namespace MetaUI.Tests.EditMode.Learn_Unity
                 return e.Message;
             }
         }
-        static StringBuilder Stringify(SerializedProperty p, bool hasEm = false, int indent = 0, StringBuilder sb = null)
+
+        private static StringBuilder Stringify(SerializedProperty p, bool hasEm = false, int indent = 0,
+            StringBuilder sb = null)
         {
             if (sb == null) sb = new StringBuilder();
-            for (int i = 0; i < indent; i++)
-            {
-                sb.Append("|    ");
-            }
+            for (var i = 0; i < indent; i++) sb.Append("|    ");
 
             sb.AppendLine($"{p.name}: {p.type}   {p.hasVisibleChildren}  {ConEm(p, hasEm)}");
             //Debug.Log($">>{p.name}");
@@ -91,21 +82,18 @@ namespace MetaUI.Tests.EditMode.Learn_Unity
                 var hasCon = con.NextVisible(true);
 
                 var em = p.Copy();
-                if(hasEm) em.NextVisible(false);
+                if (hasEm) em.NextVisible(false);
 
                 //Debug.Log($"  con=={con.name}   em=={em.name}");
-                
-                
+
+
                 while (true)
                 {
                     if (!hasCon) break;
-                    if (hasEm && SerializedProperty.EqualContents(con, em))
-                    {
-                        break;
-                    }
+                    if (hasEm && SerializedProperty.EqualContents(con, em)) break;
 
                     Stringify(con, true, indent + 1, sb);
-                    
+
                     hasCon = con.NextVisible(false);
                 }
             }

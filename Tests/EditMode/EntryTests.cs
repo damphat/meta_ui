@@ -4,21 +4,20 @@ using MetaUI.Generic;
 using NUnit.Framework;
 using UnityEditor.SceneManagement;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 
 namespace MetaUI.Tests.EditMode
 {
     public class EntryTests
     {
-        Entry<int> Count;
+        private Entry<int> Count;
 
         [SetUp]
         public void Setup()
         {
             Count = new ValueEntry<int>("Count", 1);
         }
-            
+
         [Test]
         public void SetGet()
         {
@@ -30,8 +29,8 @@ namespace MetaUI.Tests.EditMode
         [Test]
         public void AddRemove()
         {
-            
             var list = new List<object>();
+
             void Handle(int value)
             {
                 list.Add(value);
@@ -44,15 +43,15 @@ namespace MetaUI.Tests.EditMode
             Assert.AreEqual(0, list.Count);
 
             Count.Set(2);
-            Assert.AreEqual(new [] {2}, list);
+            Assert.AreEqual(new[] {2}, list);
 
             Count.Set(2);
-            Assert.AreEqual(new[] { 2 }, list);
+            Assert.AreEqual(new[] {2}, list);
 
             Count.Remove(Handle);
 
             Count.Set(3);
-            Assert.AreEqual(new object[] { 2 }, list);
+            Assert.AreEqual(new object[] {2}, list);
         }
 
         [Test]
@@ -90,9 +89,9 @@ namespace MetaUI.Tests.EditMode
             var canvas = scene.GetRootGameObjects().FirstOrDefault(go => go.name == "Canvas");
 
 
-            var objects =canvas.transform.Find("objects");
+            var objects = canvas.transform.Find("objects");
 
-            Dictionary<string, Dictionary<string, Entry>> output = new Dictionary<string, Dictionary<string, Entry>>();
+            var output = new Dictionary<string, Dictionary<string, Entry>>();
 
             foreach (Transform o in objects)
             {
@@ -104,7 +103,5 @@ namespace MetaUI.Tests.EditMode
 
             Debug.Log(output);
         }
-
     }
-    
 }

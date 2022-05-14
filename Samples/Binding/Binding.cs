@@ -7,19 +7,16 @@ public class Binding : MonoBehaviour
     {
         var enable = this.Value(true);
         var title = this.Value("initial title");
-        var icon = this.Value(Sprite.Create(Texture2D.redTexture, Rect.MinMaxRect(0,0,1,1), Vector2.zero));
+        var icon = this.Value(Sprite.Create(Texture2D.redTexture, Rect.MinMaxRect(0, 0, 1, 1), Vector2.zero));
         var stringValue = this.Value("initial stringValue");
         var boolValue = this.Value(false);
         var intValue = this.Value(5);
         var floatValue = this.Value(0.5f);
-        
+
         var dialog = this.Get("dialog");
         var cmds = this.Get("commands");
 
-        cmds.Add().Text("Text(value)").Clicked(() => dialog.EachChild(c =>
-        {
-            c.Text(title.Get());
-        }));
+        cmds.Add().Text("Text(value)").Clicked(() => dialog.EachChild(c => { c.Text(title.Get()); }));
         cmds.Add().Text("Text(provider)").Clicked(() => dialog.EachChild(c => c.Text(title)));
 
         cmds.Add().Text("Value()").Clicked(() => dialog.EachChild(c => c.Value(stringValue.Get())));
@@ -42,7 +39,6 @@ public class Binding : MonoBehaviour
 
         cmds.Add().Text("SetXXX(() => value)").Clicked(() => dialog.EachChild(c =>
         {
-
             c.Title.SetSrc(title);
             c.Background.SetSrc(icon);
             c.ValueBool.SetSrc(boolValue);
@@ -50,7 +46,7 @@ public class Binding : MonoBehaviour
             c.ValueFloat.SetSrc(floatValue);
             c.ValueString.SetSrc(stringValue);
         }));
-        
+
         cmds.Add().Text("GetXXX()").Clicked(() => dialog.EachChild(c =>
         {
             c.gameObject.name = "";
@@ -77,7 +73,8 @@ public class Binding : MonoBehaviour
             floatValue.Set(intValue.Get() / 10f);
             stringValue.Set($"string {intValue.Get()}");
             title.Set($"title {intValue.Get()}");
-            icon .Set(Sprite.Create(boolValue.Get() ? Texture2D.redTexture: Texture2D.grayTexture, Rect.MinMaxRect(0, 0, 1, 1), Vector2.zero));
+            icon.Set(Sprite.Create(boolValue.Get() ? Texture2D.redTexture : Texture2D.grayTexture,
+                Rect.MinMaxRect(0, 0, 1, 1), Vector2.zero));
         });
 
         ;

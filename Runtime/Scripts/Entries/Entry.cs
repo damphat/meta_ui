@@ -13,6 +13,8 @@ namespace MetaUI.Generic
         void SetSrc(Entry src);
         void Add(Delegate action);
         void Remove(Delegate action);
+        
+        bool IsNull { get; }
     }
 
     // of component
@@ -21,7 +23,7 @@ namespace MetaUI.Generic
     public abstract class Entry<T> : Entry, IEquatable<Entry<T>>
     {
         public static Entry<T> Null = new NullEntry<T>();
-        
+
         protected Entry(string name)
         {
             Name = name;
@@ -65,7 +67,7 @@ namespace MetaUI.Generic
             return obj is Entry<T> other && Equals(other);
         }
 
-        
+
         public bool Equals(Entry<T> other)
         {
             return EqualityComparer<T>.Default.Equals(Get(), other.Get());
@@ -78,12 +80,9 @@ namespace MetaUI.Generic
 
         public Entry<R> Convert<R>(Func<T, R> func)
         {
-            var ret = new ValueEntry<R>(this.Name, func(this.Get()));
-            this.Add(v =>
-            {
-                ret.Set(func(v));
-            });
-            
+            var ret = new ValueEntry<R>(Name, func(Get()));
+            Add(v => { ret.Set(func(v)); });
+
             return ret;
         }
 
@@ -123,6 +122,8 @@ namespace MetaUI.Generic
         {
             Remove(entry as UnityAction<T>);
         }
+
+        public virtual bool IsNull => false;
     }
 
     public class NullEntry<T> : Entry<T>
@@ -138,17 +139,16 @@ namespace MetaUI.Generic
 
         public override void Set(T value)
         {
-            
         }
 
         public override void Add(UnityAction<T> action)
         {
-            
         }
 
         public override void Remove(UnityAction<T> action)
         {
-            
         }
+
+        public override bool IsNull => true;
     }
 }

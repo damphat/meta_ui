@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using MetaUI;
 using UnityEngine;
 
@@ -9,7 +7,7 @@ public class InputTest : MonoBehaviour
     private WrapGameObject text;
     private WrapGameObject input;
 
-    void Start()
+    private void Start()
     {
         text = this.Get("Text");
         input = this.Get("InputField");
@@ -19,12 +17,10 @@ public class InputTest : MonoBehaviour
         input.ValueString.Add(value => Toast.Info(value));
 
         text.Title.SetSrc(input.ValueString);
-
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        
     }
 }

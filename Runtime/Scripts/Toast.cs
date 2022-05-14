@@ -43,10 +43,7 @@ namespace MetaUI
                 _toastCanvas.name = "Toast Canvas";
             }
 
-            if (Application.isPlaying)
-            {
-                Object.DontDestroyOnLoad(_toastCanvas);
-            }
+            if (Application.isPlaying) Object.DontDestroyOnLoad(_toastCanvas);
 
             _toastList = _toastCanvas.transform.Find("toast").gameObject;
             _toastItem = _toastList.transform.Find("Item").gameObject;
@@ -76,9 +73,7 @@ namespace MetaUI
             else
             {
                 Debug.Log($"Toast({message})");
-                return;
             }
-            
         }
 
         public static void Info(object message, float? seconds = null)

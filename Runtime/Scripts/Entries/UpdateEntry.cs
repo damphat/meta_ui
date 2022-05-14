@@ -8,7 +8,8 @@ namespace MetaUI.Generic
     {
         private T latest;
         private Func<T> update;
-        private UnityEvent<T> uevent;
+        private readonly UnityEvent<T> uevent;
+
         public UpdateEntry(string name, Func<T> update) : base(name)
         {
             latest = update();

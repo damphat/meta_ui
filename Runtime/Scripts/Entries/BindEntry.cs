@@ -5,9 +5,9 @@ namespace MetaUI.Generic
 {
     public class BindEntry<T> : Entry<T>
     {
-        private Func<T> _getter;
-        private Action<T> _setter;
-        private UnityEvent<T> _changed;
+        private readonly Func<T> _getter;
+        private readonly Action<T> _setter;
+        private readonly UnityEvent<T> _changed;
 
         public BindEntry(string name, Func<T> getter, Action<T> setter, UnityEvent<T> changed) : base(name)
         {

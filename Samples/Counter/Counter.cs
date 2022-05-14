@@ -1,6 +1,5 @@
 #region using
 
-using System;
 using MetaUI;
 using UnityEngine;
 
@@ -16,11 +15,11 @@ public class Counter : MonoBehaviour
             .Text(count.Convert(v => v.ToString()));
 
         this.Get("**/inc")
-            .Clicked(new Action(() => count.Set(count.Get() + 1)))
+            .Clicked(() => count.Set(count.Get() + 1))
             .Enable(count.Convert(v => v < 10));
 
         this.Get("**/dec")
-            .Clicked(new Action(() => count.Set(count.Get() - 1)))
+            .Clicked(() => count.Set(count.Get() - 1))
             .Enable(count.Convert(v => v > 0));
     }
 }

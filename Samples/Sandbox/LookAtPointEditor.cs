@@ -1,18 +1,16 @@
-//C# Example (LookAtPointEditor.cs)
-using UnityEngine;
 using UnityEditor;
+using UnityEngine;
 
 [CustomEditor(typeof(LookAtPoint))]
 [CanEditMultipleObjects]
 public class LookAtPointEditor : Editor
 {
-    SerializedProperty lookAtPoint;
+    private SerializedProperty lookAtPoint;
 
-    void OnEnable()
+    private void OnEnable()
     {
         lookAtPoint = serializedObject.FindProperty("lookAtPoint");
         Debug.Log(lookAtPoint);
-
     }
 
     public override void OnInspectorGUI()

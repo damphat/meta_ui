@@ -12,7 +12,7 @@ public class ToasterNoCanvas : MonoBehaviour
     {
         Toast.ConfigSeconds = 30;
         this.Toast("Good morning!");
-        this.ToastError("Error: CÛ l?i");
-        this.ToastSuccess("Th‡nh cÙng r?i !");
+        this.ToastError("Error: C√≥ l?i");
+        this.ToastSuccess("Th√†nh c√¥ng r?i !");
     }
 }

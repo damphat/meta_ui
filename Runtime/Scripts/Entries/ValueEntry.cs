@@ -9,6 +9,7 @@ namespace MetaUI.Generic
     {
         private T value;
         private UnityEvent<T> changed;
+
         public ValueEntry(string name, T value) : base(name)
         {
             this.value = value;
@@ -27,7 +28,6 @@ namespace MetaUI.Generic
                 this.value = value;
                 changed.Invoke(this.value);
             }
-            
         }
 
         public override void Add(UnityAction<T> action)

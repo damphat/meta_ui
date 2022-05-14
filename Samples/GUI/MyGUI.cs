@@ -1,20 +1,16 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class MyGUI : MonoBehaviour
 {
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
-        
     }
 
-    [SerializeField]
-    private string str1 = "xxxxx x x x";
+    [SerializeField] private string str1 = "xxxxx x x x";
     private string str2 = "xxxxx x x x";
     private string str3 = "xxxxx x x x";
+
     private void OnGUI()
     {
         GUILayout.BeginVertical(GUILayout.Width(300));
@@ -24,13 +20,7 @@ public class MyGUI : MonoBehaviour
         {
             str1 = GUILayout.TextField(str1, GUILayout.ExpandWidth(true));
         }
-        else
-        {
-            // if (GUILayout.Button("click"))
-            // {
-            //     str2 += '!';
-            // }
-        }
+
         // GUILayout.EndVertical();
         str2 = GUILayout.TextField(str2, GUILayout.ExpandWidth(true));
         str3 = GUILayout.TextField(str3, GUILayout.ExpandWidth(true));
@@ -38,8 +28,7 @@ public class MyGUI : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        
     }
 }
