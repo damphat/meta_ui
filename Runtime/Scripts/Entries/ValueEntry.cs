@@ -4,7 +4,6 @@ using UnityEngine.Events;
 
 namespace MetaUI.Generic
 {
- 
     [Serializable]
     public class ValueEntry<T> : Entry<T>
     {

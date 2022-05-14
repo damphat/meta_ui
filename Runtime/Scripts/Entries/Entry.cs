@@ -1,4 +1,6 @@
-﻿using UnityEngine.Events;
+﻿using System;
+using System.Collections.Generic;
+using UnityEngine.Events;
 
 namespace MetaUI.Generic
 {
@@ -6,9 +8,16 @@ namespace MetaUI.Generic
     {
         string Name { get; }
         object Get();
+        T GetAs<T>();
         void Set(object value);
-
+        void SetSrc(Entry src);
+        void Add(Delegate action);
+        void Remove(Delegate action);
     }
+
+    // of component
+    // target to child/property
+    // listen to parent properties
     public abstract class Entry<T> : Entry
     {
         protected Entry(string name)
@@ -17,6 +26,7 @@ namespace MetaUI.Generic
         }
 
         public string Name { get; }
+
         public string Error { get; protected set; }
 
         public Entry<T> Src { get; protected set; }
@@ -32,17 +42,14 @@ namespace MetaUI.Generic
                 Set(value);
             }
 
-            if (this.Src != src)
+            if (Src != src)
             {
-                if (this.Src != null)
+                if (Src != null) Src.Remove(Handler);
+                Src = src;
+                if (Src != null)
                 {
-                    this.Src.Remove(Handler);
-                }
-                this.Src = src;
-                if (this.Src != null)
-                {
-                    this.Set(this.Src.Get());
-                    this.Src.Add(Handler);
+                    Set(Src.Get());
+                    Src.Add(Handler);
                 }
             }
         }
@@ -51,16 +58,26 @@ namespace MetaUI.Generic
 
         public abstract void Remove(UnityAction<T> action);
 
+        public override bool Equals(object obj)
+        {
+            return obj is Entry<T> other && Equals(other);
+        }
+
+        protected bool Equals(Entry<T> other)
+        {
+            return EqualityComparer<T>.Default.Equals(Get(), other.Get());
+        }
+
+        public override int GetHashCode()
+        {
+            return Get().GetHashCode();
+        }
+
         public override string ToString()
         {
             if (Error != null)
-            {
                 return $"{Name}: Error({Error})";
-            }
-            else
-            {
-                return $"{Name}: {Get()}";
-            }
+            return $"{Name}: {Get()}";
         }
 
         object Entry.Get()
@@ -68,9 +85,29 @@ namespace MetaUI.Generic
             return Get();
         }
 
+        T1 Entry.GetAs<T1>()
+        {
+            return (T1) Convert.ChangeType(Get(), typeof(T1));
+        }
+
         void Entry.Set(object value)
         {
-            Set((T)value);
+            Set((T) Convert.ChangeType(value, typeof(T)));
+        }
+
+        void Entry.SetSrc(Entry entry)
+        {
+            SetSrc((Entry<T>) entry);
+        }
+
+        void Entry.Add(Delegate entry)
+        {
+            Add(entry as UnityAction<T>);
+        }
+
+        void Entry.Remove(Delegate entry)
+        {
+            Remove(entry as UnityAction<T>);
         }
     }
 }
