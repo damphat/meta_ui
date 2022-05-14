@@ -12,7 +12,7 @@ namespace MetaUI
     // TODO more lazy
     // TODO dictionary of accessors
     [DisallowMultipleComponent]
-    public class Binder : MonoBehaviour, IBinder
+    public class Binder1 : MonoBehaviour, IBinder1
     {
         public string Kind { get; private set; }
 

@@ -104,6 +104,7 @@ namespace MetaUI.Generic
         }
 
 
+        
         public Entry<T> GetEntry<T>(string name)
         {
             if (dict.TryGetValue(name, out var entry))
@@ -111,7 +112,7 @@ namespace MetaUI.Generic
                 return (Entry<T>) entry;
             }
 
-            return null;
+            return Entry<T>.Null;
         }
 
         public Entry<string> Title => GetEntry<string>("Title");
@@ -122,8 +123,23 @@ namespace MetaUI.Generic
         public Entry<bool> Interactable => GetEntry<bool>("Interactable");
         public Entry<Sprite> Background => GetEntry<Sprite>("Background");
 
-        [NonSerialized]
-        public UnityEvent Clicked;
+        private UnityEvent clicked;
+        public UnityEvent Clicked
+        {
+            get
+            {
+                if (_dict == null)
+                {
+                    Detect();
+                    if (clicked == null)
+                    {
+                        clicked = new UnityEvent();
+                    }
+                }
+                
+                return clicked;
+            }
+        }
 
         public string Detect()
         {
@@ -141,7 +157,7 @@ namespace MetaUI.Generic
                 var button = GetComponent<Button>();
                 if (button != null)
                 {
-                    Clicked = button.onClick;
+                    clicked = button.onClick;
                     var Interactable = AddEntry("Interactable", (Selectable)button);
                     var Title = AddEntry("Title", GetComponentInChildren<Text>()) ?? AddEntry("Title", GetComponentInChildren<TMP_Text>());
                     return "Button";

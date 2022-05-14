@@ -1,6 +1,7 @@
 #region using
 
 using System;
+using MetaUI.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using Object = UnityEngine.Object;
@@ -52,9 +53,9 @@ namespace MetaUI
             return this;
         }
 
-        public WrapGameObject Enable(Func<bool> provider)
+        public WrapGameObject Enable(Entry<bool> provider)
         {
-            Binder.Interactable.Set(provider);
+            Binder.Interactable.SetSrc(provider);
             return this;
         }
 
@@ -63,9 +64,9 @@ namespace MetaUI
             return Enable(!value);
         }
 
-        public WrapGameObject Disable(Func<bool> provider)
+        public WrapGameObject Disable(Entry<bool> provider)
         {
-            Binder.Interactable.Set(() => !provider());
+            Binder.Interactable.SetSrc(provider);
             return this;
         }
 
@@ -75,28 +76,28 @@ namespace MetaUI
             return this;
         }
 
-        public virtual WrapGameObject Text(Func<string> provider)
+        public virtual WrapGameObject Text(Entry<string> provider)
         {
-            Binder.Title.Set(provider);
+            Binder.Title.SetSrc(provider);
             return this;
         }
 
 
         public virtual WrapGameObject Changed(UnityAction<string> changed)
         {
-            Binder.ValueString.Get(changed);
+            Binder.String.Add(changed);
             return this;
         }
 
         public virtual WrapGameObject Value(string value)
         {
-            Binder.ValueString.Set(value);
+            Binder.String.Set(value);
             return this;
         }
 
-        public WrapGameObject Value(Func<string> provider)
+        public WrapGameObject Value(Entry<string> provider)
         {
-            Binder.ValueString.Set(provider);
+            Binder.String.SetSrc(provider);
             return this;
         }
 

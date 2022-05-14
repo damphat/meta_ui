@@ -18,8 +18,10 @@ namespace MetaUI.Generic
     // of component
     // target to child/property
     // listen to parent properties
-    public abstract class Entry<T> : Entry
+    public abstract class Entry<T> : Entry, IEquatable<Entry<T>>
     {
+        public static Entry<T> Null = new NullEntry<T>();
+        
         protected Entry(string name)
         {
             Name = name;
@@ -42,7 +44,7 @@ namespace MetaUI.Generic
                 Set(value);
             }
 
-            if (Src != src)
+            if (!ReferenceEquals(Src, src))
             {
                 if (Src != null) Src.Remove(Handler);
                 Src = src;
@@ -63,7 +65,8 @@ namespace MetaUI.Generic
             return obj is Entry<T> other && Equals(other);
         }
 
-        protected bool Equals(Entry<T> other)
+        
+        public bool Equals(Entry<T> other)
         {
             return EqualityComparer<T>.Default.Equals(Get(), other.Get());
         }
@@ -71,6 +74,17 @@ namespace MetaUI.Generic
         public override int GetHashCode()
         {
             return Get().GetHashCode();
+        }
+
+        public Entry<R> Convert<R>(Func<T, R> func)
+        {
+            var ret = new ValueEntry<R>(this.Name, func(this.Get()));
+            this.Add(v =>
+            {
+                ret.Set(func(v));
+            });
+            
+            return ret;
         }
 
         public override string ToString()
@@ -87,12 +101,12 @@ namespace MetaUI.Generic
 
         T1 Entry.GetAs<T1>()
         {
-            return (T1) Convert.ChangeType(Get(), typeof(T1));
+            return (T1) System.Convert.ChangeType(Get(), typeof(T1));
         }
 
         void Entry.Set(object value)
         {
-            Set((T) Convert.ChangeType(value, typeof(T)));
+            Set((T) System.Convert.ChangeType(value, typeof(T)));
         }
 
         void Entry.SetSrc(Entry entry)
@@ -108,6 +122,33 @@ namespace MetaUI.Generic
         void Entry.Remove(Delegate entry)
         {
             Remove(entry as UnityAction<T>);
+        }
+    }
+
+    public class NullEntry<T> : Entry<T>
+    {
+        public NullEntry(string name = null) : base(name)
+        {
+        }
+
+        public override T Get()
+        {
+            return default;
+        }
+
+        public override void Set(T value)
+        {
+            
+        }
+
+        public override void Add(UnityAction<T> action)
+        {
+            
+        }
+
+        public override void Remove(UnityAction<T> action)
+        {
+            
         }
     }
 }

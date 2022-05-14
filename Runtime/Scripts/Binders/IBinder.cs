@@ -3,7 +3,7 @@
 namespace MetaUI
 {
     // TODO: Accessor<bool> Active
-    public interface IBinder
+    public interface IBinder1
     {
         string Kind { get; }
         Accessor<string> Title { get; }

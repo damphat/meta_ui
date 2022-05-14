@@ -1,29 +1,80 @@
-﻿using System;
+﻿using NUnit.Framework;
+using System;
 using System.Collections.Generic;
+using System.Runtime.ExceptionServices;
 using System.Text;
-using MetaUI.Generic;
-using NUnit.Framework;
-using NUnit.Framework.Constraints;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.ParticleSystemJobs;
-using UnityEngine.UI;
+using UnityEngine.Serialization;
 using Object = UnityEngine.Object;
 
 namespace MetaUI.Tests.EditMode.Learn_Unity
 {
     [Serializable]
+    public class MyClass : Object
+    {
+        public MyClass()
+        {
+        }
+
+        public void AddFooToMyEvent()
+        {
+            MyEvent = new UnityEvent();
+            MyEvent.AddListener(Foo);
+        }
+
+        public void Foo()
+        {
+            Debug.Log("Foooooo!");
+        }
+
+        public UnityEvent MyEvent;
+    }
+
+    [Serializable]
     public class O : MonoBehaviour
     {
         [SerializeField]
-        public string username = "damphat";
+        public string publicSerializeField = "damphat";
+        public string publicField = "damphat";
+
+        [SerializeField]
+        private string privateSerializeField = "damphat";
+        private string privateField = "damphat";
+
+        public List<int> publicListInt1;
+        public IList<int> publicIListInt2;
+
+        public MyClass publicMyClass;
+
         public UnityEvent<int> clicked1;
         public UnityEvent<int> clicked2;
     }
     public class SerializationTests
     {
-        static StringBuilder Stringify1(SerializedProperty p, int indent = 0, StringBuilder sb = null)
+        static string ConEm(SerializedProperty p, bool hasEm)
+        {
+            p = p.Copy();
+            try
+            {
+                
+                //var n = p.CountInProperty();
+
+                // return $"{n}";
+
+                var con = p.Copy();
+                con.NextVisible(true);
+                var em = p.Copy();
+                if(hasEm) em.NextVisible(false);
+                return $"  (-- {con.name} -- {em.name})";
+            }
+            catch (Exception e)
+            {
+                return e.Message;
+            }
+        }
+        static StringBuilder Stringify(SerializedProperty p, bool hasEm = false, int indent = 0, StringBuilder sb = null)
         {
             if (sb == null) sb = new StringBuilder();
             for (int i = 0; i < indent; i++)
@@ -31,33 +82,45 @@ namespace MetaUI.Tests.EditMode.Learn_Unity
                 sb.Append("|    ");
             }
 
-            
-            sb.AppendLine($"{p.name}: {p.type}");
+            sb.AppendLine($"{p.name}: {p.type}   {p.hasVisibleChildren}  {ConEm(p, hasEm)}");
+            //Debug.Log($">>{p.name}");
 
-            if (p.hasChildren)
+            if (p.hasVisibleChildren)
             {
-                var end = p.GetEndProperty(true);
+                var con = p.Copy();
+                var hasCon = con.NextVisible(true);
 
-                var c = p.Copy();
-                var hasNext = c.NextVisible(true);
-                while (hasNext && !SerializedProperty.EqualContents(c, end))
+                var em = p.Copy();
+                if(hasEm) em.NextVisible(false);
+
+                //Debug.Log($"  con=={con.name}   em=={em.name}");
+                
+                
+                while (true)
                 {
-                    Stringify1(c, indent + 1, sb);
-                    hasNext = c.NextVisible(false);
+                    if (!hasCon) break;
+                    if (hasEm && SerializedProperty.EqualContents(con, em))
+                    {
+                        break;
+                    }
+
+                    Stringify(con, true, indent + 1, sb);
+                    
+                    hasCon = con.NextVisible(false);
                 }
             }
 
             return sb;
-
         }
 
         [Test]
         public void Test1()
         {
             var go = new GameObject("THE GO");
-            var com = go.AddComponent<O>();
+            var oc = go.AddComponent<O>();
+            var sp = new SerializedObject(oc).GetIterator();
 
-            Debug.Log(Stringify1(new SerializedObject(com).GetIterator()));
+            Debug.Log(Stringify(sp));
         }
     }
 }

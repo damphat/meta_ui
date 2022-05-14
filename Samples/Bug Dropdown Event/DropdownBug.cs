@@ -6,24 +6,18 @@ public class DropdownBug : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        int index = 1;
+        var index = this.Value(1);
         
-        this.Get("Dropdown1").ValueInt.Set(() => index);
-        this.Get("Dropdown1").ValueInt.Get((v) =>
+        this.Get("Dropdown1").ValueInt.SetSrc(index);
+        this.Get("Dropdown1").ValueInt.Add((v) =>
         {
             this.Toast(v);
         });
 
-        this.Get("Dropdown2").ValueInt.Set(() => index);
-        this.Get("Dropdown2").ValueInt.Get((v) =>
+        this.Get("Dropdown2").ValueInt.SetSrc(index);
+        this.Get("Dropdown2").ValueInt.Add((v) =>
         {
             this.Toast(v);
         });
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

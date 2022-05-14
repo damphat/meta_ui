@@ -3,59 +3,52 @@ using UnityEngine;
 
 public class Binding : MonoBehaviour
 {
-    void Start()
+    private void Start()
     {
-        var enable = true;
-        var title = "initial title";
-        var icon = Sprite.Create(Texture2D.redTexture, Rect.MinMaxRect(0,0,1,1), Vector2.zero);
-        var stringValue = "initial stringValue";
-        var boolValue = false;
-        var intValue = 5;
-        var floatValue = 0.5f;
+        var enable = this.Value(true);
+        var title = this.Value("initial title");
+        var icon = this.Value(Sprite.Create(Texture2D.redTexture, Rect.MinMaxRect(0,0,1,1), Vector2.zero));
+        var stringValue = this.Value("initial stringValue");
+        var boolValue = this.Value(false);
+        var intValue = this.Value(5);
+        var floatValue = this.Value(0.5f);
         
         var dialog = this.Get("dialog");
         var cmds = this.Get("commands");
 
         cmds.Add().Text("Text(value)").Clicked(() => dialog.EachChild(c =>
         {
-            c.Text(title);
+            c.Text(title.Get());
         }));
-        cmds.Add().Text("Text(provider)").Clicked(() => dialog.EachChild(c => c.Text(() => title)));
+        cmds.Add().Text("Text(provider)").Clicked(() => dialog.EachChild(c => c.Text(title)));
 
-        cmds.Add().Text("Value()").Clicked(() => dialog.EachChild(c => c.Value(stringValue)));
-        cmds.Add().Text("Value(provider)").Clicked(() => dialog.EachChild(c => c.Value(() => c.Binder.Kind)));
+        cmds.Add().Text("Value()").Clicked(() => dialog.EachChild(c => c.Value(stringValue.Get())));
+        cmds.Add().Text("Value(provider)").Clicked(() => dialog.EachChild(c => c.Value(stringValue)));
 
-        cmds.Add().Text("Enable(value)").Clicked(() => dialog.EachChild(c => c.Enable(enable)));
-        cmds.Add().Text("Enable(provider)").Clicked(() => dialog.EachChild(c => c.Enable(() => enable)));
+        cmds.Add().Text("Enable(value)").Clicked(() => dialog.EachChild(c => c.Enable(enable.Get())));
+        cmds.Add().Text("Enable(provider)").Clicked(() => dialog.EachChild(c => c.Enable(enable)));
 
         cmds.Add().Text("Clicked").Clicked(() => dialog.EachChild(c => c.Clicked(() => this.Toast(c.gameObject.name))));
 
         cmds.Add().Text("SetXXX(value)").Clicked(() => dialog.EachChild(c =>
         {
-            var t = c.Title;
-            if (t == null)
-            {
-                Debug.Log("null");
-            }
-            t.Set("xx");
-
-            c.Title.Set(title);
-            c.Background.Set(icon);
-            c.ValueBool.Set(boolValue);
-            c.ValueInt.Set(intValue);
-            c.ValueFloat.Set(floatValue);
-            c.ValueString.Set(stringValue);
+            c.Title.Set(title.Get());
+            c.Background.Set(icon.Get());
+            c.ValueBool.Set(boolValue.Get());
+            c.ValueInt.Set(intValue.Get());
+            c.ValueFloat.Set(floatValue.Get());
+            c.ValueString.Set(stringValue.Get());
         }));
 
         cmds.Add().Text("SetXXX(() => value)").Clicked(() => dialog.EachChild(c =>
         {
 
-            c.Title.Set(() => title);
-            c.Background.Set(() => icon);
-            c.ValueBool.Set(() => boolValue);
-            c.ValueInt.Set(() => intValue);
-            c.ValueFloat.Set(() => floatValue);
-            c.ValueString.Set(() => stringValue);
+            c.Title.SetSrc(title);
+            c.Background.SetSrc(icon);
+            c.ValueBool.SetSrc(boolValue);
+            c.ValueInt.SetSrc(intValue);
+            c.ValueFloat.SetSrc(floatValue);
+            c.ValueString.SetSrc(stringValue);
         }));
         
         cmds.Add().Text("GetXXX()").Clicked(() => dialog.EachChild(c =>
@@ -70,21 +63,21 @@ public class Binding : MonoBehaviour
 
         cmds.Add().Text("GetXXX((value) => {})").Clicked(() => dialog.EachChild(c =>
         {
-            c.ValueBool.Get(x => this.Toast($"Bool:{x}"));
-            c.ValueInt.Get(x => this.Toast($"Int:{x}"));
-            c.ValueFloat.Get(x => this.Toast($"Float:{x}"));
-            c.ValueString.Get(x => this.Toast($"String:{x}"));
+            c.ValueBool.Add(x => this.Toast($"Bool:{x}"));
+            c.ValueInt.Add(x => this.Toast($"Int:{x}"));
+            c.ValueFloat.Add(x => this.Toast($"Float:{x}"));
+            c.ValueString.Add(x => this.Toast($"String:{x}"));
         }));
 
         cmds.Add().Text("inc").Clicked(() =>
         {
-            enable = !enable;
-            intValue = (intValue + 1) % 10;
-            boolValue = !boolValue;
-            floatValue = intValue / 10f;
-            stringValue = $"string {intValue}";
-            title = $"title {intValue}";
-            icon = Sprite.Create(boolValue ? Texture2D.redTexture: Texture2D.grayTexture, Rect.MinMaxRect(0, 0, 1, 1), Vector2.zero);
+            enable.Set(!enable.Get());
+            intValue.Set((intValue.Get() + 1) % 10);
+            boolValue.Set(!boolValue.Get());
+            floatValue.Set(intValue.Get() / 10f);
+            stringValue.Set($"string {intValue.Get()}");
+            title.Set($"title {intValue.Get()}");
+            icon .Set(Sprite.Create(boolValue.Get() ? Texture2D.redTexture: Texture2D.grayTexture, Rect.MinMaxRect(0, 0, 1, 1), Vector2.zero));
         });
 
         ;

@@ -16,9 +16,9 @@ public class InputTest : MonoBehaviour
 
         input.Title.Set("username");
         input.ValueString.Set("damphat");
-        input.ValueString.Get(value => Toast.Info(value));
+        input.ValueString.Add(value => Toast.Info(value));
 
-        text.Title.Set(() => input.ValueString.Get());
+        text.Title.SetSrc(input.ValueString);
 
     }
 

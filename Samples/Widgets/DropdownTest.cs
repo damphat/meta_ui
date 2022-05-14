@@ -8,15 +8,15 @@ public class DropdownTest : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        var index = 0;
+        var index = this.Value(0);
         var d1 = this.Get("Dropdown1");
         var d2 = this.Get("Dropdown2");
 
-        d1.ValueInt.Set(() => index);
-        d2.ValueInt.Set(() => index);
+        d1.ValueInt.SetSrc(index);
+        d2.ValueInt.SetSrc(index);
 
-        d1.ValueInt.Get(v => index = v);
-        d2.ValueInt.Get(v => index = v);
+        d1.ValueInt.Add(v => index.Set(v));
+        d2.ValueInt.Add(v => index.Set(v));
 
 
 

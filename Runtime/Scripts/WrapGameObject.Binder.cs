@@ -1,5 +1,6 @@
 #region using
 
+using MetaUI.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -8,47 +9,42 @@ using UnityEngine.Events;
 namespace MetaUI
 {
     // TODO: Wrap multiple gameObject
-    public partial class WrapGameObject : IBinder
+    public partial class WrapGameObject 
     {
-        private Binder _binder;
+        private AutoBinder _binder;
 
-        public Binder Binder
+        public AutoBinder Binder
         {
             get
             {
                 if (_binder == null)
                 {
-                    _binder = gameObject.GetComponent<Binder>();
-                    if (_binder == null) _binder = gameObject.AddComponent<Binder>();
+                    _binder = gameObject.GetComponent<AutoBinder>();
+                    if (_binder == null) _binder = gameObject.AddComponent<AutoBinder>();
                 }
 
                 return _binder;
             }
         }
+        
+        public Entry<string> Title => Binder.Title;
 
-        public string Kind => Binder.Kind;
-        public Accessor<string> Title => Binder.Title;
+        public Entry<Sprite> Background => Binder.Background;
 
-        public Accessor<string> Description => Binder.Description;
+        public Entry<string> ValueString => Binder.String;
 
-        public Accessor<Sprite> Background => Binder.Background;
+        public Entry<bool> ValueBool => Binder.Bool;
 
-        public Accessor<Sprite> Icon => Binder.Icon;
+        public Entry<int> ValueInt => Binder.Int;
 
-        public Accessor<string> ValueString => Binder.ValueString;
+        public Entry<float> ValueFloat => Binder.Float;
 
-        public Accessor<bool> ValueBool => Binder.ValueBool;
-
-        public Accessor<int> ValueInt => Binder.ValueInt;
-
-        public Accessor<float> ValueFloat => Binder.ValueFloat;
-
-        public Accessor<bool> Interactable => Binder.Interactable;
+        public Entry<bool> Interactable => Binder.Interactable;
 
 
         public void AddClickedListener(UnityAction action)
         {
-            Binder.AddClickedListener(action);
+            Binder.Clicked.AddListener(action);
         }
     }
 }

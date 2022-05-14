@@ -6,8 +6,8 @@ namespace MetaUI
 {
     public abstract class Accessor
     {
-        public static Binder CurrentBinder;
-        public Binder Binder { get; }
+        public static Binder1 CurrentBinder;
+        public Binder1 Binder { get; }
         public Component Component { get; }
         public string Name { get; }
 
