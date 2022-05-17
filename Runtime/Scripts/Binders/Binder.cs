@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
@@ -9,6 +10,7 @@ using UnityEngine.UI;
 
 namespace MetaUI
 {
+    [Obsolete]
     // TODO more lazy
     // TODO dictionary of accessors
     [DisallowMultipleComponent]

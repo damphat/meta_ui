@@ -13,7 +13,6 @@ namespace MetaUI.Generic
         void SetSrc(Entry src);
         void Add(Delegate action);
         void Remove(Delegate action);
-        
         bool IsNull { get; }
     }
 

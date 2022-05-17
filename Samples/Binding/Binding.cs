@@ -16,18 +16,18 @@ public class Binding : MonoBehaviour
         var dialog = this.Get("dialog");
         var cmds = this.Get("commands");
 
-        cmds.Add().Text("Text(value)").Clicked(() => dialog.EachChild(c => { c.Text(title.Get()); }));
-        cmds.Add().Text("Text(provider)").Clicked(() => dialog.EachChild(c => c.Text(title)));
+        cmds.Add().SetTitle("Text(value)").Clicked(() => dialog.EachChild(c => { c.Title.Set(title.Get()); }));
+        cmds.Add().SetTitle("Text(provider)").Clicked(() => dialog.EachChild(c => c.Title.SetSrc(title)));
 
-        cmds.Add().Text("Value()").Clicked(() => dialog.EachChild(c => c.Value(stringValue.Get())));
-        cmds.Add().Text("Value(provider)").Clicked(() => dialog.EachChild(c => c.Value(stringValue)));
+        cmds.Add().SetTitle("Value()").Clicked(() => dialog.EachChild(c => c.ValueString.Set(stringValue.Get())));
+        cmds.Add().SetTitle("Value(provider)").Clicked(() => dialog.EachChild(c => c.ValueString.SetSrc(stringValue)));
 
-        cmds.Add().Text("Enable(value)").Clicked(() => dialog.EachChild(c => c.Enable(enable.Get())));
-        cmds.Add().Text("Enable(provider)").Clicked(() => dialog.EachChild(c => c.Enable(enable)));
+        cmds.Add().SetTitle("Enable(value)").Clicked(() => dialog.EachChild(c => c.Interactable.Set(enable.Get())));
+        cmds.Add().SetTitle("Enable(provider)").Clicked(() => dialog.EachChild(c => c.Interactable.SetSrc(enable)));
 
-        cmds.Add().Text("Clicked").Clicked(() => dialog.EachChild(c => c.Clicked(() => this.Toast(c.gameObject.name))));
+        cmds.Add().SetTitle("Clicked").Clicked(() => dialog.EachChild(c => c.Clicked(() => this.Toast(c.gameObject.name))));
 
-        cmds.Add().Text("SetXXX(value)").Clicked(() => dialog.EachChild(c =>
+        cmds.Add().SetTitle("SetXXX(value)").Clicked(() => dialog.EachChild(c =>
         {
             c.Title.Set(title.Get());
             c.Background.Set(icon.Get());
@@ -37,7 +37,7 @@ public class Binding : MonoBehaviour
             c.ValueString.Set(stringValue.Get());
         }));
 
-        cmds.Add().Text("SetXXX(() => value)").Clicked(() => dialog.EachChild(c =>
+        cmds.Add().SetTitle("SetXXX(() => value)").Clicked(() => dialog.EachChild(c =>
         {
             c.Title.SetSrc(title);
             c.Background.SetSrc(icon);
@@ -47,7 +47,7 @@ public class Binding : MonoBehaviour
             c.ValueString.SetSrc(stringValue);
         }));
 
-        cmds.Add().Text("GetXXX()").Clicked(() => dialog.EachChild(c =>
+        cmds.Add().SetTitle("GetXXX()").Clicked(() => dialog.EachChild(c =>
         {
             c.gameObject.name = "";
             c.gameObject.name += $"t:{c.Title.Get()},";
@@ -57,7 +57,7 @@ public class Binding : MonoBehaviour
             c.gameObject.name += $"s:{c.ValueString.Get()},";
         }));
 
-        cmds.Add().Text("GetXXX((value) => {})").Clicked(() => dialog.EachChild(c =>
+        cmds.Add().SetTitle("GetXXX((value) => {})").Clicked(() => dialog.EachChild(c =>
         {
             c.ValueBool.Add(x => this.Toast($"Bool:{x}"));
             c.ValueInt.Add(x => this.Toast($"Int:{x}"));
@@ -65,7 +65,7 @@ public class Binding : MonoBehaviour
             c.ValueString.Add(x => this.Toast($"String:{x}"));
         }));
 
-        cmds.Add().Text("inc").Clicked(() =>
+        cmds.Add().SetTitle("inc").Clicked(() =>
         {
             enable.Set(!enable.Get());
             intValue.Set((intValue.Get() + 1) % 10);

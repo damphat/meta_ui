@@ -12,14 +12,14 @@ public class Counter : MonoBehaviour
         var count = this.Value(0);
 
         this.Get("**/count")
-            .Text(count.Convert(v => v.ToString()));
+            .Title.SetSrc(count.Convert(v => v.ToString()));
 
-        this.Get("**/inc")
-            .Clicked(() => count.Set(count.Get() + 1))
-            .Enable(count.Convert(v => v < 10));
+        var inc = this.Get("**/inc");
+        inc.Clicked(() => count.Set(count.Get() + 1));
+        inc.Interactable.SetSrc(count.Convert(v => v < 10));
 
-        this.Get("**/dec")
-            .Clicked(() => count.Set(count.Get() - 1))
-            .Enable(count.Convert(v => v > 0));
+        var dec = this.Get("**/dec");
+        dec.Clicked(() => count.Set(count.Get() - 1));
+        dec.Interactable.SetSrc(count.Convert(v => v > 0));
     }
 }

@@ -12,27 +12,27 @@ namespace MetaUI
         public static float ConfigClickToastErrorSeconds = 3;
         public static float ConfigClickToastSuccessSeconds = 3;
 
-        public static WrapGameObject Get(string qs)
+        public static MetaObject Get(string qs)
         {
             var tr = Query.Get(null, qs);
             if (tr == null)
             {
                 var msg = $"Can not query: '{qs}' from the current scene";
                 Toast.Info(msg, 10);
-                throw new MetaUIException(msg);
+                throw new MetaException(msg);
             }
 
-            return new WrapGameObject(tr.gameObject);
+            return new MetaObject(tr.gameObject);
         }
 
-        public static WrapGameObject From(GameObject go)
+        public static MetaObject From(GameObject go)
         {
-            return new WrapGameObject(go);
+            return new MetaObject(go);
         }
 
-        public static WrapGameObject From(Component go)
+        public static MetaObject From(Component go)
         {
-            return new WrapGameObject(go.gameObject);
+            return new MetaObject(go.gameObject);
         }
     }
 }

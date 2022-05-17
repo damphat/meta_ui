@@ -2,24 +2,24 @@ using UnityEngine;
 
 namespace MetaUI
 {
-    partial class WrapGameObject
+    partial class MetaObject
     {
-        public WrapGameObject From(Component c)
+        public MetaObject From(Component c)
         {
-            return new WrapGameObject(c.gameObject);
+            return new MetaObject(c.gameObject);
         }
 
-        public WrapGameObject Get(string qs)
+        public MetaObject Get(string qs)
         {
             var go = Query.Get(gameObject.transform, qs);
             if (go == null)
             {
                 var error = $"Can not Get('{qs}') from {Path}";
                 Toast.Error(error, 10);
-                throw new MetaUIException(error);
+                throw new MetaException(error);
             }
 
-            return new WrapGameObject(go.gameObject);
+            return new MetaObject(go.gameObject);
         }
     }
 }

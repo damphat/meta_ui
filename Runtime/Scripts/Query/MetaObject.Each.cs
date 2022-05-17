@@ -7,9 +7,9 @@ using UnityEngine;
 
 namespace MetaUI
 {
-    public partial class WrapGameObject
+    public partial class MetaObject
     {
-        public WrapGameObject EachChild(Action<WrapGameObject> action)
+        public MetaObject EachChild(Action<MetaObject> action)
         {
             foreach (Transform transform in gameObject.transform) action(From(transform));
 

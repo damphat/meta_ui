@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace MetaUI
 {
-    partial class WrapGameObject
+    partial class MetaObject
     {
         private void ToastError(object message)
         {
@@ -20,9 +20,9 @@ namespace MetaUI
             if (UI.ConfigClickToastSuccessSeconds > 0) Toast.Success(message, UI.ConfigClickToastSuccessSeconds);
         }
 
-        public WrapGameObject Clicked(Action click)
+        public MetaObject Clicked(Action click)
         {
-            AddClickedListener(() =>
+            Binder.Clicked.AddListener(() =>
             {
                 try
                 {
@@ -37,9 +37,9 @@ namespace MetaUI
             return this;
         }
 
-        public WrapGameObject Clicked<R>(Func<R> click)
+        public MetaObject Clicked<R>(Func<R> click)
         {
-            AddClickedListener(() =>
+            Binder.Clicked.AddListener(() =>
             {
                 try
                 {
@@ -55,13 +55,13 @@ namespace MetaUI
             return this;
         }
 
-        public WrapGameObject Clicked(Func<Task> click)
+        public MetaObject Clicked(Func<Task> click)
         {
-            AddClickedListener(async () =>
+            Binder.Clicked.AddListener(async () =>
             {
                 try
                 {
-                    Enable(false);
+                    Interactable.Set(false);
                     await click();
                 }
                 catch (Exception ex)
@@ -71,19 +71,19 @@ namespace MetaUI
                 }
                 finally
                 {
-                    Enable(true);
+                    Interactable.Set(true);
                 }
             });
             return this;
         }
 
-        public WrapGameObject Clicked<R>(Func<Task<R>> click)
+        public MetaObject Clicked<R>(Func<Task<R>> click)
         {
-            AddClickedListener(async () =>
+            Binder.Clicked.AddListener(async () =>
             {
                 try
                 {
-                    Enable(false);
+                    Interactable.Set(false);
                     var r = await click();
                     ToastSuccess(r);
                 }
@@ -94,7 +94,7 @@ namespace MetaUI
                 }
                 finally
                 {
-                    Enable(true);
+                    Interactable.Set(true);
                 }
             });
             return this;

@@ -8,14 +8,14 @@ using UnityEngine;
 
 namespace MetaUI
 {
-    public static class MetaUIExtensions
+    public static class Extensions
     {
-        public static WrapGameObject Get(this MonoBehaviour behavior, string qs)
+        public static MetaObject Get(this MonoBehaviour behavior, string qs)
         {
             return UI.From(behavior).Get(qs);
         }
 
-        public static WrapGameObject Get(this MonoBehaviour behavior)
+        public static MetaObject Get(this MonoBehaviour behavior)
         {
             return UI.From(behavior);
         }

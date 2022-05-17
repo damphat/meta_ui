@@ -1,9 +1,11 @@
-﻿using TMPro;
+﻿using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace MetaUI
 {
+    [Obsolete]
     public abstract class Accessor
     {
         public static Binder1 CurrentBinder;

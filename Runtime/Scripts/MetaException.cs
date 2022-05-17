@@ -6,18 +6,18 @@ using System;
 
 namespace MetaUI
 {
-    public class MetaUIException : Exception
+    public class MetaException : Exception
     {
-        public MetaUIException()
+        public MetaException()
         {
         }
 
-        public MetaUIException(string message)
+        public MetaException(string message)
             : base(message)
         {
         }
 
-        public MetaUIException(string message, Exception inner)
+        public MetaException(string message, Exception inner)
             : base(message, inner)
         {
         }

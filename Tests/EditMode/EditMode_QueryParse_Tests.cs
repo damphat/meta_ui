@@ -34,7 +34,7 @@ public class EditMode_QueryParse_Tests
     public void ParseError()
     {
         Assert.Throws<ArgumentNullException>(() => Query.Parse(null));
-        Assert.Throws<MetaUIException>(() => Query.Parse(".unknown"));
-        Assert.Throws<MetaUIException>(() => Query.Parse("0xxx"));
+        Assert.Throws<MetaException>(() => Query.Parse(".unknown"));
+        Assert.Throws<MetaException>(() => Query.Parse("0xxx"));
     }
 }

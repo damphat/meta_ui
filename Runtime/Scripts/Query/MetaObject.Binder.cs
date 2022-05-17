@@ -9,7 +9,7 @@ using UnityEngine.Events;
 namespace MetaUI
 {
     // TODO: Wrap multiple gameObject
-    public partial class WrapGameObject
+    public partial class MetaObject
     {
         private AutoBinder _binder;
 
@@ -41,10 +41,5 @@ namespace MetaUI
 
         public Entry<bool> Interactable => Binder.Interactable;
 
-
-        public void AddClickedListener(UnityAction action)
-        {
-            Binder.Clicked.AddListener(action);
-        }
     }
 }

@@ -6,6 +6,7 @@ using UnityEngine.Events;
 
 namespace MetaUI
 {
+    [Obsolete]
     public class Accessor<T> : Accessor
     {
         private readonly Func<T> getter;

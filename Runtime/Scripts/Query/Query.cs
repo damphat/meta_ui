@@ -13,8 +13,6 @@ using UnityEngine.UI;
 namespace MetaUI
 {
     // TODO: GetAll("x/**/#tag")
-    // TODO: interface QueryAccessor { match, text, click, skin}
-    // TODO: auto detect and choose accessor: Text | TMP_Text
     public class Query
     {
         private static readonly List<GameObject> RootObjects = new List<GameObject>();
@@ -71,14 +69,14 @@ namespace MetaUI
                         if (MatchFunc.TryGetValue(key, out var func))
                             ret.Add(func);
                         else
-                            throw new MetaUIException($"Bad class '{key}' in the query string: '{qs}'");
+                            throw new MetaException($"Bad class '{key}' in the query string: '{qs}'");
                     }
                     else if (c >= '0' && c <= '9')
                     {
                         if (int.TryParse(key, out var result))
                             ret.Add(int.Parse(key));
                         else
-                            throw new MetaUIException($"Bad number '{key}' in the query string: '{qs}'");
+                            throw new MetaException($"Bad number '{key}' in the query string: '{qs}'");
                     }
                     else
                     {

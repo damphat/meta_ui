@@ -1,7 +1,9 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace MetaUI
 {
+    [Obsolete]
     // TODO: Accessor<bool> Active
     public interface IBinder1
     {

@@ -4,8 +4,8 @@ using UnityEngine;
 public class InputTest : MonoBehaviour
 {
     // Start is called before the first frame update
-    private WrapGameObject text;
-    private WrapGameObject input;
+    private MetaObject text;
+    private MetaObject input;
 
     private void Start()
     {
