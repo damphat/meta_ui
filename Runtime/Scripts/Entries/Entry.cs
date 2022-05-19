@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using MetaUI.Sigos;
 using UnityEngine.Events;
 
 namespace MetaUI.Generic
@@ -14,6 +15,10 @@ namespace MetaUI.Generic
         void Add(Delegate action);
         void Remove(Delegate action);
         bool IsNull { get; }
+        void OnEnable();
+        void OnDisable();
+
+        void Bind(Store store);
     }
 
     // of component
@@ -123,6 +128,53 @@ namespace MetaUI.Generic
         }
 
         public virtual bool IsNull => false;
+        
+        #region MyRegion
+
+        private Store store;
+        private bool isEnable;
+        private void StoreLisener(object obj)
+        {
+            Set(obj is T t? t : default );
+        }
+
+        private void EntryListener(T value)
+        {
+            store?.Set(value);
+        }
+
+        public virtual void Bind(Store s)
+        {
+            if (store != s)
+            {
+                if (store != null && isEnable)
+                {
+                    store.RemoveListener(StoreLisener);
+                    Remove(EntryListener);
+                }
+                store = s;
+                if (store != null && isEnable)
+                {
+                    store.AddListener(StoreLisener);
+                    Add(EntryListener);
+                }
+            }
+        }
+        
+
+        public virtual void OnEnable()
+        {
+            isEnable = true;
+            store?.AddListener(StoreLisener);
+        }
+
+        public virtual void OnDisable()
+        {
+            store?.RemoveListener(StoreLisener);
+            isEnable = false;
+        }
+
+        #endregion
     }
 
     public class NullEntry<T> : Entry<T>
@@ -149,5 +201,19 @@ namespace MetaUI.Generic
         }
 
         public override bool IsNull => true;
+        public override void OnEnable()
+        {
+            
+        }
+
+        public override void OnDisable()
+        {
+            
+        }
+
+        public override void Bind(Store store)
+        {
+            
+        }
     }
 }

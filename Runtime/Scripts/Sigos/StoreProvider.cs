@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace MetaUI.Sigos
 {
-    public class StoreBehavior : MonoBehaviour
+    public class StoreProvider : MonoBehaviour
     {
         private Store _store;
         public Store store => _store ??= new Store();
@@ -17,14 +17,10 @@ namespace MetaUI.Sigos
             return store.At(path);
         }
 
-        public void Awake()
+        private void Update()
         {
-            this.Toast("StoreBehavior.Awake");
+            store.Update();
         }
 
-        public void Start()
-        {
-            this.Toast("StoreBehavior.Start");
-        }
     }
 }

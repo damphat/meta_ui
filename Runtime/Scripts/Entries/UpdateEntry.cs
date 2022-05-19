@@ -1,16 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using MetaUI.Sigos;
 using UnityEngine.Events;
 
 namespace MetaUI.Generic
 {
-    public class UpdateEntry<T> : Entry<T>, IUpdate
+    public class UpdateEntry1<T> : Entry<T>, IUpdate1
     {
         private T latest;
         private Func<T> update;
         private readonly UnityEvent<T> uevent;
 
-        public UpdateEntry(string name, Func<T> update) : base(name)
+        public UpdateEntry1(string name, Func<T> update) : base(name)
         {
             latest = update();
             uevent = new UnityEvent<T>();
@@ -19,6 +20,21 @@ namespace MetaUI.Generic
         public override T Get()
         {
             return latest;
+        }
+
+        public override void OnEnable()
+        {
+            
+        }
+
+        public override void OnDisable()
+        {
+            
+        }
+
+        public override void Bind(Store store)
+        {
+            
         }
 
         public override void Set(T value)

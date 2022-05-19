@@ -21,6 +21,16 @@ namespace MetaUI.Generic
             return value;
         }
 
+        public override void OnEnable()
+        {
+            
+        }
+
+        public override void OnDisable()
+        {
+            
+        }
+
         public override void Set(T value)
         {
             if (!EqualityComparer<T>.Default.Equals(this.value, value))

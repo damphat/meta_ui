@@ -2,12 +2,12 @@
 using UnityEditor;
 using UnityEngine;
 
-    [CustomEditor(typeof(StoreBehavior))]
-    public class StoreBehaviorEditor : Editor
+    [CustomEditor(typeof(StoreProvider))]
+    public class StoreProviderEditor : Editor
     {
         public override void OnInspectorGUI()
         {
-            var storeBehavior = (StoreBehavior)target; 
+            var storeBehavior = (StoreProvider)target; 
             GUILayout.Label(storeBehavior.store?.ToString());
         }
     }

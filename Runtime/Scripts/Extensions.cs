@@ -26,9 +26,9 @@ namespace MetaUI
             return new ValueEntry<T>(name, value);
         }
 
-        public static Entry<T> Value<T>(this MonoBehaviour behavior, Func<T> update, string name = "<none>")
+        public static Entry<T> Value1<T>(this MonoBehaviour behavior, Func<T> update, string name = "<none>")
         {
-            return new UpdateEntry<T>(name, update);
+            return new UpdateEntry1<T>(name, update);
         }
 
         public static void Toast(this MonoBehaviour behaviour, object msg, float? seconds = null)

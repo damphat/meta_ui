@@ -1,6 +1,6 @@
 ﻿namespace MetaUI.Generic
 {
-    public interface IUpdate
+    public interface IUpdate1
     {
         void Update();
     }

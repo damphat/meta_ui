@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
-using UnityEngine;
 
 namespace MetaUI.Sigos
 {
@@ -37,7 +37,7 @@ namespace MetaUI.Sigos
 
         private static void AppendIndent(StringBuilder sb, int indent)
         {
-            for (var i = 0; i < indent; i++) sb.Append("  ");
+            for (var i = 0; i < indent; i++) sb.Append("    ");
         }
 
         public static void Freeze(object obj)
@@ -85,26 +85,111 @@ namespace MetaUI.Sigos
         }
         public static void ToBuilder(Sigo obj, StringBuilder sb, int indent)
         {
-            void AppendIndent(int indent)
+            if (!IsFrozen(obj))
             {
-                for (var i = 0; i < indent; i++) sb.Append("  ");
+                sb.Append('*');
             }
-
             sb.AppendLine("{");
             foreach (var e in obj)
             {
-                AppendIndent(indent + 1);
+                AppendIndent(sb, indent + 1);
                 sb.Append(e.Key);
                 sb.Append(": ");
                 ToBuilder(e.Value, sb, indent + 1);
                 sb.AppendLine();
             }
 
-            AppendIndent(indent);
+            AppendIndent(sb, indent);
             sb.Append('}');
         }
 
+        public static IEnumerable<KeyValuePair<string, object>> Merge(Store store, object state)
+        {
+            var r = store.children;
+            var s = state as IReadOnlyDictionary<string, object>;
+
+            if (r == null && s == null) yield break;
+            
+            if (r == null)
+            {
+                foreach (var e in s)
+                {
+                    yield return e;
+                }
+                yield break;
+            } 
+            
+            else if (s == null)
+            {
+                foreach (var e in r)
+                {
+                    yield return new KeyValuePair<string, object>(e.Key, e.Value);
+                }
+                yield break;
+            }
+            else
+            {
+
+                foreach (var e in s)
+                {
+                    yield return r.ContainsKey(e.Key) ? new KeyValuePair<string, object>(e.Key, r[e.Key]) : e;
+                }
+
+                foreach (var e in r.Where(e => !s.ContainsKey(e.Key)))
+                {
+                    yield return new KeyValuePair<string, object>(e.Key, r[e.Key]);
+                }
+            }
+        }
+        
+        public static void ToBuilder(Store store, StringBuilder sb, int indent)
+        {
+            var state = store.state;
+            if (!IsFrozen(state))
+            {
+                sb.Append('*');
+            }
+            
+            if (state is null)
+            {
+                sb.Append("null");
+            } else if (state is bool b)
+            {
+                sb.Append(b ? "true" : "false");
+            } else if (state is string s)
+            {
+                sb.Append($"'{s}'");
+            } else if (state is Sigo tree)
+            {
+            }
+            else
+            {
+                sb.Append(state);
+            }
+            
+            sb.AppendLine("{{");
+            foreach (var e in Merge(store, state))
+            {
+                AppendIndent(sb, indent + 1);
+                sb.Append(e.Key);
+                sb.Append(": ");
+                if (e.Value is Store r)
+                {
+                    ToBuilder(r, sb, indent + 1);    
+                }
+                else
+                {
+                    ToBuilder(e.Value, sb, indent + 1);
+                }
+                
+                sb.AppendLine();
+            }
+
+            AppendIndent(sb, indent);
+            sb.Append("}}");
+        }
     }
+    
     public class Sigo : IReadOnlyDictionary<string, object>
     {
         private Dictionary<string, object> data;

@@ -5,16 +5,15 @@ using System.Text;
 
 namespace MetaUI.Sigos
 {
-    public class Store
+    public partial class Store
     {
         private Store parent;
         private string key;
-        private Dictionary<string, Store> children;
-        private object state;
+        internal Dictionary<string, Store> children;
+        internal object state; // internal because of ToBuilder()
         private object state2;
 
         private HashSet<Action<object>> changed = new HashSet<Action<object>>();
-        private HashSet<Action<string, object, object>> childChanged = new HashSet<Action<string, object, object>>();
         public void AddListener(Action<object> a)
         {
             changed.Add(a);
@@ -72,6 +71,24 @@ namespace MetaUI.Sigos
             return path.Split('/').Aggregate(this, (current, k) => current.At1(k));
         }
 
+        public Store Root()
+        {
+            var ret = this;
+            while (ret.parent != null) ret = ret.parent;
+            return ret;
+        }
+
+        public string Path()
+        {
+            var store = this;
+            var path = store.key;
+
+            while (true)
+            {
+                store = store.parent;
+            }
+        }
+
         private void Up(object s)
         {
             this.state = s;
@@ -95,6 +112,11 @@ namespace MetaUI.Sigos
             }
         }
 
+        public void Set(string path, object state)
+        {
+            this.At(path).Set(state);
+        }
+
         public object Get()
         {
             Utils.Freeze(state);
@@ -104,8 +126,23 @@ namespace MetaUI.Sigos
         public override string ToString()
         {
             var sb = new StringBuilder();
-            Utils.ToBuilder(this.state, sb, 0);
+            Utils.ToBuilder(this, sb, 0);
             return sb.ToString();
         }
+    }
+
+    partial class Store
+    {
+        private HashSet<Action<string, string, object, object>> childChanged = new HashSet<Action<string, string, object, object>>();
+        public void AddChildListener(Action<string, string, object, object> action)
+        {
+            childChanged.Add(action);
+        }
+        
+        public void RemoveChildListener(Action<string, string, object, object> action)
+        {
+            childChanged.Remove(action);
+        }
+        
     }
 }

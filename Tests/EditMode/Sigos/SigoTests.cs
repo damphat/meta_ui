@@ -143,6 +143,19 @@ public class SigoTests
         Assert.AreEqual(new [] { "40" }, age);
     }
     
+    [Test]
+    public void AddListenerTests_input_input()
+    {
+        var store = new Store();
+        var age = new List<object>();
+        store.At("user/age").AddListener(v => age.Add(v));
+        store.At("user/age").Set("40");
+        store.Update();
+        
+        Assert.AreEqual(new [] {Sigo.Create("user", Sigo.Create("age", "40"))}, age);
+
+    }
+    
     // cay
     // - nut frozen
     // - co listener
